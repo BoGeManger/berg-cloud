@@ -1,0 +1,39 @@
+server:
+  port: 40000
+  tomcat:
+    max-http-post-size: -1
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.16.10.19:8848
+    gateway:
+      routes:
+        - id: openapi
+          uri: lb://openapi
+          predicates:
+            - Path=/openapi/**
+          filters:
+            # 设置最大请求数据大小
+            - name: RequestSize
+              args:
+                maxSize: 5000000
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 700000

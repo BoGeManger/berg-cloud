@@ -1,0 +1,40 @@
+server:
+  port: 41000
+  servlet:
+    context-path: /openapi
+  tomcat:
+    max-http-post-size: -1
+
+spring:
+  profiles:
+    active: test
+  application:
+    name: openapi
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.16.10.19:8848
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 700000
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 300000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 0
+  eureka:
+    enabled: false
+
+swagger:
+  enabled: false
