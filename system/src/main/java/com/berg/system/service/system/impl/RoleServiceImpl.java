@@ -6,8 +6,8 @@ import com.github.pagehelper.PageHelper;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.sys.entity.RoleComponentTbl;
 import com.berg.dao.sys.entity.RoleTbl;
-import com.berg.dao.sys.service.RoleComponentTblService;
-import com.berg.dao.sys.service.RoleTblService;
+import com.berg.dao.sys.service.RoleComponentTblDao;
+import com.berg.dao.sys.service.RoleTblDao;
 import com.berg.system.service.system.RoleService;
 import com.berg.system.authentication.JWTUtil;
 import com.berg.vo.system.RoleEditVo;
@@ -29,9 +29,9 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     JWTUtil jWTUtil;
     @Autowired
-    RoleTblService roleTblService;
+    RoleTblDao roleTblDao;
     @Autowired
-    RoleComponentTblService roleComponentTblService;
+    RoleComponentTblDao roleComponentTblDao;
 
     /**
      * 获取角色分页列表
@@ -47,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
             query.like("name",input.getName());
         }
         query.orderByDesc("modify_time");
-        List<RoleVo> list = roleTblService.list(query,RoleVo.class);
+        List<RoleVo> list = roleTblDao.list(query,RoleVo.class);
         PageInfo<RoleVo> page = new PageInfo<>(list);
         return page;
     }
@@ -60,13 +60,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleEditVo getRole(Integer id){
         RoleEditVo result = new RoleEditVo();
-        RoleTbl roleTbl = roleTblService.getById(id);
+        RoleTbl roleTbl = roleTblDao.getById(id);
         if(roleTbl!=null){
             BeanUtils.copyProperties(roleTbl,result);
             LambdaQueryWrapper query = new QueryWrapper<RoleComponentTbl>().select("com_id").lambda()
                     .eq(RoleComponentTbl::getRoleId,id)
                     .eq(RoleComponentTbl::getIsdel,0);
-            result.setComIds(roleComponentTblService.listObjs(query));
+            result.setComIds(roleComponentTblDao.listObjs(query));
         }
         return  result;
     }
@@ -124,7 +124,7 @@ public class RoleServiceImpl implements RoleService {
             roleTbl.setCreateUser(operator);
             roleTbl.setIsdel(0);
         }
-        roleTblService.saveOrUpdate(roleTbl);
+        roleTblDao.saveOrUpdate(roleTbl);
         return roleTbl.getId();
     }
 
@@ -139,7 +139,7 @@ public class RoleServiceImpl implements RoleService {
         LambdaQueryWrapper query = new LambdaQueryWrapper<RoleComponentTbl>()
                 .eq(RoleComponentTbl::getRoleId,roleId)
                 .eq(RoleComponentTbl::getIsdel,0);
-        List<RoleComponentTbl> updateList = roleComponentTblService.list(query);
+        List<RoleComponentTbl> updateList = roleComponentTblDao.list(query);
         //作废原有数据
         if(updateList.size()>0){
             updateList.forEach(item->{
@@ -147,7 +147,7 @@ public class RoleServiceImpl implements RoleService {
                 item.setDelTime(now);
                 item.setDelUser(operator);
             });
-            roleComponentTblService.updateBatchById(updateList);
+            roleComponentTblDao.updateBatchById(updateList);
         }
         List<RoleComponentTbl> addList = new ArrayList<>();
         //新增授权数据
@@ -160,7 +160,7 @@ public class RoleServiceImpl implements RoleService {
             roleComponentTbl.setIsdel(0);
             addList.add(roleComponentTbl);
         });
-        roleComponentTblService.saveBatch(addList);
+        roleComponentTblDao.saveBatch(addList);
     }
 
     /**
@@ -172,24 +172,24 @@ public class RoleServiceImpl implements RoleService {
     public void delRole(Integer id){
         LocalDateTime now = LocalDateTime.now();
         String operator = jWTUtil.getUsername();
-        RoleTbl roleTbl = roleTblService.getById(id);
+        RoleTbl roleTbl = roleTblDao.getById(id);
         if(roleTbl!=null){
             roleTbl.setDelTime(now);
             roleTbl.setDelUser(operator);
             roleTbl.setIsdel(1);
-            roleTblService.updateById(roleTbl);
+            roleTblDao.updateById(roleTbl);
             //作废原有授权数据
             LambdaQueryWrapper query = new LambdaQueryWrapper<RoleComponentTbl>()
                     .eq(RoleComponentTbl::getRoleId,id)
                     .eq(RoleComponentTbl::getIsdel,0);
-            List<RoleComponentTbl> updateList =  roleComponentTblService.list(query);
+            List<RoleComponentTbl> updateList =  roleComponentTblDao.list(query);
             if(updateList.size()>0){
                 updateList.forEach(item->{
                     item.setIsdel(1);
                     item.setDelTime(now);
                     item.setDelUser(operator);
                 });
-                roleComponentTblService.updateBatchById(updateList);
+                roleComponentTblDao.updateBatchById(updateList);
             }
         }
     }

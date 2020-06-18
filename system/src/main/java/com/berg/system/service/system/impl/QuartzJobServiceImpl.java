@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.sys.entity.QuartzJobTbl;
-import com.berg.dao.sys.service.QuartzJobTblService;
+import com.berg.dao.sys.service.QuartzJobTblDao;
 import com.berg.exception.FailException;
 import com.berg.exception.ParamException;
 import com.berg.exception.UserFriendException;
@@ -34,7 +34,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Autowired
     Scheduler scheduler;
     @Autowired
-    QuartzJobTblService quartzJobTblService;
+    QuartzJobTblDao quartzJobTblDao;
 
     /**
      * 获取定时任务分页
@@ -55,7 +55,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
             query.eq("status",input.getStatus());
         }
         query.orderByDesc("create_time");
-        List<JobVo> list = quartzJobTblService.list(query,JobVo.class);
+        List<JobVo> list = quartzJobTblDao.list(query,JobVo.class);
         PageInfo<JobVo> page = new PageInfo<>(list);
         return page;
     }
@@ -67,7 +67,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
      */
     @Override
     public JobEditVo getJob(Integer id){
-        JobEditVo result = quartzJobTblService.getById(id,JobEditVo.class);
+        JobEditVo result = quartzJobTblDao.getById(id,JobEditVo.class);
         return result;
     }
 
@@ -82,14 +82,14 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         LambdaQueryWrapper queryName = new LambdaQueryWrapper<QuartzJobTbl>()
                 .eq(QuartzJobTbl::getName,input.getName())
                 .eq(QuartzJobTbl::getIsdel,0);
-        if(quartzJobTblService.count(queryName)>0){
+        if(quartzJobTblDao.count(queryName)>0){
             throw new UserFriendException("任务名称已存在");
         }
         input.setJobClassName(input.getJobClassName().trim());
         LambdaQueryWrapper queryClass = new LambdaQueryWrapper<QuartzJobTbl>()
                 .eq(QuartzJobTbl::getJobClassName,input.getJobClassName())
                 .eq(QuartzJobTbl::getIsdel,0);
-        if(quartzJobTblService.count(queryClass)>0){
+        if(quartzJobTblDao.count(queryClass)>0){
             throw new UserFriendException("任务类名已存在");
         }
         String operator = jWTUtil.getUsername();
@@ -102,7 +102,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         quartzJobTbl.setModifyUser(operator);
         quartzJobTbl.setModifyTime(now);
         quartzJobTbl.setIsdel(0);
-        quartzJobTblService.save(quartzJobTbl);
+        quartzJobTblDao.save(quartzJobTbl);
         schedulerAdd(input.getJobClassName(),input.getCronExpression(),input.getParameter());
         return quartzJobTbl.getId();
     }
@@ -144,12 +144,12 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     public void delJob(Integer id){
         String operator = jWTUtil.getUsername();
         LocalDateTime now = LocalDateTime.now();
-        QuartzJobTbl quartzJobTbl = quartzJobTblService.getById(id);
+        QuartzJobTbl quartzJobTbl = quartzJobTblDao.getById(id);
         quartzJobTbl.setIsdel(1);
         quartzJobTbl.setDelTime(now);
         quartzJobTbl.setDelUser(operator);
         quartzJobTbl.setStatus(1);
-        quartzJobTblService.updateById(quartzJobTbl);
+        quartzJobTblDao.updateById(quartzJobTbl);
         schedulerDelete(quartzJobTbl.getJobClassName());
     }
 
@@ -177,7 +177,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     public void pauseJob(Integer id){
         String operator = jWTUtil.getUsername();
         LocalDateTime now = LocalDateTime.now();
-        QuartzJobTbl quartzJobTbl = quartzJobTblService.getById(id);
+        QuartzJobTbl quartzJobTbl = quartzJobTblDao.getById(id);
         if(quartzJobTbl.getIsdel().equals(1)){
             throw new UserFriendException("定时任务已删除");
         }
@@ -187,7 +187,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         quartzJobTbl.setStatus(1);
         quartzJobTbl.setModifyTime(now);
         quartzJobTbl.setModifyUser(operator);
-        quartzJobTblService.updateById(quartzJobTbl);
+        quartzJobTblDao.updateById(quartzJobTbl);
         try{
             scheduler.pauseJob(JobKey.jobKey(quartzJobTbl.getJobClassName()));
         }catch (Exception ex){
@@ -204,7 +204,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     public void resumeJob(Integer id){
         String operator = jWTUtil.getUsername();
         LocalDateTime now = LocalDateTime.now();
-        QuartzJobTbl quartzJobTbl = quartzJobTblService.getById(id);
+        QuartzJobTbl quartzJobTbl = quartzJobTblDao.getById(id);
         if(quartzJobTbl.getIsdel().equals(1)){
             throw new UserFriendException("定时任务已删除");
         }
@@ -214,7 +214,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         quartzJobTbl.setStatus(0);
         quartzJobTbl.setModifyTime(now);
         quartzJobTbl.setModifyUser(operator);
-        quartzJobTblService.updateById(quartzJobTbl);
+        quartzJobTblDao.updateById(quartzJobTbl);
         try{
             schedulerDelete(quartzJobTbl.getJobClassName());
             schedulerAdd(quartzJobTbl.getJobClassName(), quartzJobTbl.getCronExpression(), quartzJobTbl.getParameter());

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.sys.entity.FileTbl;
-import com.berg.dao.sys.service.FileTblService;
+import com.berg.dao.sys.service.FileTblDao;
 import com.berg.exception.FailException;
 import com.berg.file.MinioUtil;
 import com.berg.system.authentication.JWTUtil;
@@ -30,7 +30,7 @@ public class FileServiceImpl  implements FileService {
     FileAsyncTask fileAsyncTask;
 
     @Autowired
-    FileTblService fileTblService;
+    FileTblDao fileTblDao;
 
     /**
      * 获取文件列表
@@ -52,7 +52,7 @@ public class FileServiceImpl  implements FileService {
             }
         }
         query.orderByDesc("create_time");
-        List<FileVo> list = fileTblService.list(query,FileVo.class);
+        List<FileVo> list = fileTblDao.list(query,FileVo.class);
         PageInfo<FileVo> page = new PageInfo<>(list);
         return page;
     }
@@ -100,6 +100,6 @@ public class FileServiceImpl  implements FileService {
         fileTbl.setDelUser(operator);
         fileTbl.setDelTime(now);
         LambdaUpdateWrapper query = new LambdaUpdateWrapper<FileTbl>().eq(FileTbl::getName,name).eq(FileTbl::getIsdel,0);
-        fileTblService.update(fileTbl,query);
+        fileTblDao.update(fileTbl,query);
     }
 }

@@ -2,7 +2,7 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.berg.dao.sys.entity.FileTbl;
-import com.berg.dao.sys.service.FileTblService;
+import com.berg.dao.sys.service.FileTblDao;
 import com.berg.vo.system.FilePathVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class FileAsyncTask {
 
     @Autowired
-    FileTblService fileTblService;
+    FileTblDao fileTblDao;
 
     /**
      * 上传文件
@@ -27,7 +27,7 @@ public class FileAsyncTask {
         LocalDateTime now = LocalDateTime.now();
         Boolean isAdd = true;
         LambdaQueryWrapper query = new LambdaQueryWrapper<FileTbl>().eq(FileTbl::getName,name);
-        FileTbl fileTbl = fileTblService.getOne(query);
+        FileTbl fileTbl = fileTblDao.getOne(query);
         if(fileTbl!=null){
             isAdd = false;
         }else{
@@ -44,9 +44,9 @@ public class FileAsyncTask {
         fileTbl.setType(type);
         fileTbl.setIsdel(0);
         if(isAdd){
-            fileTblService.save(fileTbl);
+            fileTblDao.save(fileTbl);
         }else {
-            fileTblService.updateById(fileTbl);
+            fileTblDao.updateById(fileTbl);
         }
     }
 

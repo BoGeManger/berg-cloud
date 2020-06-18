@@ -2,7 +2,7 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.berg.dao.sys.entity.OrganizationTbl;
-import com.berg.dao.sys.service.OrganizationTblService;
+import com.berg.dao.sys.service.OrganizationTblDao;
 import com.berg.system.service.system.OrganizationService;
 import com.berg.system.authentication.JWTUtil;
 import com.berg.vo.common.ListVo;
@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -27,7 +24,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     JWTUtil jWTUtil;
     @Autowired
-    OrganizationTblService organizationTblService;
+    OrganizationTblDao organizationTblDao;
 
     /**
      * 获取组织树形列表
@@ -40,7 +37,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<OrganizationTbl>()
                 .eq(OrganizationTbl::getIsdel,0)
                 .eq(OrganizationTbl::getParentId,0);
-        List<OrganizationTbl> organizationTblList = organizationTblService.list(queryWrapper);
+        List<OrganizationTbl> organizationTblList = organizationTblDao.list(queryWrapper);
         organizationTblList.forEach(item->{
             OrganizationTreeVo tree = new OrganizationTreeVo();
             BeanUtils.copyProperties(item, tree);
@@ -62,7 +59,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<OrganizationTbl>()
                 .eq(OrganizationTbl::getIsdel,0)
                 .eq(OrganizationTbl::getParentId,id);
-        List<OrganizationTbl> organizationTblList = organizationTblService.list(queryWrapper);
+        List<OrganizationTbl> organizationTblList = organizationTblDao.list(queryWrapper);
         organizationTblList.forEach(item->{
             OrganizationTreeVo tree = new OrganizationTreeVo();
             BeanUtils.copyProperties(item, tree);
@@ -80,7 +77,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public OrganizationEditVo getOrganization(Integer id){
-        OrganizationEditVo result = organizationTblService.getById(id,OrganizationEditVo.class);
+        OrganizationEditVo result = organizationTblDao.getById(id,OrganizationEditVo.class);
         return result;
     }
 
@@ -139,7 +136,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationTbl.setCreateTime(now);
             organizationTbl.setIsdel(0);
         }
-        organizationTblService.saveOrUpdate(organizationTbl);
+        organizationTblDao.saveOrUpdate(organizationTbl);
         return organizationTbl.getId();
     }
 
@@ -154,6 +151,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationTbl.setDelTime(now);
         organizationTbl.setDelUser(operator);
         organizationTbl.setIsdel(0);
-        organizationTblService.updateById(organizationTbl);
+        organizationTblDao.updateById(organizationTbl);
     }
 }

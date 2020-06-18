@@ -14,9 +14,15 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  boot:
+    admin:
+      client:
+        url: localhost:30000
   cloud:
     nacos:
       discovery:
+        metadata:
+          servlet.context-path: /system
         server-addr: 172.16.10.19:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -44,10 +50,22 @@ spring:
       maxPoolPreparedStatementPerConnectionSize: 20
       filters: stat,wall
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      #druid sql监控服务
+  #     web-stat-filter:
+  #      enabled: true
+  #      url-pattern: /*
+  #     stat-view-servlet:
+  #      allow: 127.0.0.1
+  #      deny: ''
+  #      enabled: true
+  #      login-password: druid
+  #      login-username: druid
+  #      reset-enable: false
+  #      url-pattern: /druid/*
   redis:
     database: 0
     host: 172.16.10.19
-    password: admin
+    password:
     pool:
       maxActive: 200
       maxIdle: 8
@@ -80,14 +98,22 @@ spring:
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
   global-config:
     banner: false
   configuration:
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # 返回类型为Map,显示null对应的字段
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     call-setters-on-nulls: true
 
 minio:
@@ -97,7 +123,7 @@ minio:
   bucketName: master
 
 shiro:
-  urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login
+  urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login,/**/druid/**,/**/actuator/**
   accounts: admin
   expireTime: 7200
 
@@ -113,3 +139,9 @@ snowflake:
 
 swagger:
   enabled: true
+
+logging:
+  file: ./log/sys-err.log
+  #配置日志级别
+#  level:
+#    root: debug

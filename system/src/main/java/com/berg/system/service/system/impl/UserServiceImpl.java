@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.berg.dao.sys.entity.UserRoleTbl;
 import com.berg.dao.sys.entity.UserTbl;
-import com.berg.dao.sys.service.UserRoleTblService;
-import com.berg.dao.sys.service.UserTblService;
+import com.berg.dao.sys.service.UserRoleTblDao;
+import com.berg.dao.sys.service.UserTblDao;
 import com.berg.dao.page.PageInfo;
 import com.berg.constant.RedisKeyConstants;
 import com.berg.exception.UserFriendException;
@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     JWTUtil jWTUtil;
     @Autowired
-    UserTblService userTblService;
+    UserTblDao userTblDao;
     @Autowired
-    UserRoleTblService userRoleTblService;
+    UserRoleTblDao userRoleTblDao;
     @Autowired
     RedisTemplate<String, String> stringTemplate;
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             query.like("username", input.getUsername());
         }
         query.orderByDesc("modify_time");
-        List<UserVo> list = userTblService.list(query,UserVo.class);
+        List<UserVo> list = userTblDao.list(query,UserVo.class);
         PageInfo<UserVo> page = new PageInfo<>(list);
         return page;
     }
@@ -69,12 +69,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserEditVo getUser(Integer id) {
-        UserEditVo result = userTblService.getById(id,UserEditVo.class);
+        UserEditVo result = userTblDao.getById(id,UserEditVo.class);
         if(result!=null){
             LambdaQueryWrapper query = new LambdaQueryWrapper<UserRoleTbl>()
                     .eq(UserRoleTbl::getIsdel, 0)
                     .eq(UserRoleTbl::getUserId, id);
-            result.setRoldIds(userRoleTblService.listObjs(query));
+            result.setRoldIds(userRoleTblDao.listObjs(query));
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delUser(Integer id) {
-        UserTbl userTbl = userTblService.getById(id);
+        UserTbl userTbl = userTblDao.getById(id);
         if (userTbl != null) {
             if (userTbl.getIsdel().equals(1)) {
                 throw new UserFriendException("该用户已被删除");
@@ -132,20 +132,20 @@ public class UserServiceImpl implements UserService {
             userTbl.setIsdel(1);
             userTbl.setDelTime(now);
             userTbl.setDelUser(operator);
-            userTblService.updateById(userTbl);
+            userTblDao.updateById(userTbl);
             delUserRoleCache(userTbl.getUsername());
             //作废原有数据
             LambdaQueryWrapper query = new LambdaQueryWrapper<UserRoleTbl>()
                     .eq(UserRoleTbl::getIsdel, 0)
                     .eq(UserRoleTbl::getUserId, userTbl.getId());
-            List<UserRoleTbl> updateList = userRoleTblService.list(query);
+            List<UserRoleTbl> updateList = userRoleTblDao.list(query);
             if (updateList.size() > 0) {
                 updateList.forEach(item -> {
                     item.setIsdel(1);
                     item.setDelTime(now);
                     item.setDelUser(operator);
                 });
-                userRoleTblService.updateBatchById(updateList);
+                userRoleTblDao.updateBatchById(updateList);
             }
         }
     }
@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void lockUser(Integer id) {
-        UserTbl userTbl = userTblService.getById(id);
+        UserTbl userTbl = userTblDao.getById(id);
         if (userTbl != null) {
             if (userTbl.getIslock().equals(1)) {
                 throw new UserFriendException("该用户已被锁定");
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
             userTbl.setIslock(1);
             userTbl.setLockTime(now);
             userTbl.setLockUser(operator);
-            userTblService.updateById(userTbl);
+            userTblDao.updateById(userTbl);
         }
     }
 
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void unlockUser(Integer id) {
-        UserTbl userTbl = userTblService.getById(id);
+        UserTbl userTbl = userTblDao.getById(id);
         if (userTbl != null) {
             if (userTbl.getIsdel().equals(1)) {
                 throw new UserFriendException("该用户已被删除");
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
             userTbl.setIslock(0);
             userTbl.setLockTime(now);
             userTbl.setLockUser(operator);
-            userTblService.updateById(userTbl);
+            userTblDao.updateById(userTbl);
         }
     }
 
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updatePassword(UpdatePasswordInVo input) {
-        UserTbl userTbl = userTblService.getById(input.getId());
+        UserTbl userTbl = userTblDao.getById(input.getId());
         if (userTbl != null) {
             if (userTbl.getIslock().equals(1)) {
                 throw new UserFriendException("该用户已被锁定");
@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService {
             userTbl.setPassword(DigestUtils.md5DigestAsHex(input.getPassword().getBytes()));
             userTbl.setModifyTime(now);
             userTbl.setModifyUser(operator);
-            userTblService.updateById(userTbl);
+            userTblDao.updateById(userTbl);
         }
     }
 
@@ -244,7 +244,7 @@ public class UserServiceImpl implements UserService {
             userTbl.setCreateUser(operator);
             userTbl.setIsdel(0);
         }
-        userTblService.saveOrUpdate(userTbl);
+        userTblDao.saveOrUpdate(userTbl);
         return userTbl.getId();
     }
 
@@ -259,7 +259,7 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper query = new LambdaQueryWrapper<UserTbl>()
                 .eq(UserTbl::getUsername, username)
                 .eq(UserTbl::getIsdel, 0).ne(UserTbl::getId, id);
-        UserTbl userTbl = userTblService.getOne(query);
+        UserTbl userTbl = userTblDao.getOne(query);
         if (userTbl == null) {
             flag = true;
         }
@@ -278,7 +278,7 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper query = new LambdaQueryWrapper<UserRoleTbl>()
                 .eq(UserRoleTbl::getIsdel,0)
                 .eq(UserRoleTbl::getUserId,userId);
-        List<UserRoleTbl> updateList = userRoleTblService.list(query);
+        List<UserRoleTbl> updateList = userRoleTblDao.list(query);
         //作废原有数据
         if (updateList.size() > 0) {
             updateList.forEach(item -> {
@@ -286,7 +286,7 @@ public class UserServiceImpl implements UserService {
                 item.setDelTime(now);
                 item.setDelUser(operator);
             });
-            userRoleTblService.updateBatchById(updateList);
+            userRoleTblDao.updateBatchById(updateList);
         }
         List<UserRoleTbl> addList = new ArrayList<>();
         //新增授权数据
@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService {
             sysUserRoleTbl.setIsdel(0);
             addList.add(sysUserRoleTbl);
         });
-        userRoleTblService.saveBatch(addList);
+        userRoleTblDao.saveBatch(addList);
     }
 
     /**

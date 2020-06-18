@@ -3,7 +3,7 @@ package com.berg.system.authentication;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.berg.constant.RedisKeyConstants;
 import com.berg.dao.sys.entity.UserTbl;
-import com.berg.dao.sys.service.UserTblService;
+import com.berg.dao.sys.service.UserTblDao;
 import com.berg.system.service.system.LoginService;
 import com.berg.system.constant.SystemConstans;
 import com.berg.utils.DesUtil;
@@ -33,7 +33,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     LoginService loginService;
     @Autowired
-    UserTblService userTblService;
+    UserTblDao userTblDao;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -100,7 +100,7 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException("token校验不通过");
 
         // 通过用户名查询用户信息
-        UserTbl userTbl = userTblService.getOne(new LambdaQueryWrapper<UserTbl>().eq(UserTbl::getUsername,username));
+        UserTbl userTbl = userTblDao.getOne(new LambdaQueryWrapper<UserTbl>().eq(UserTbl::getUsername,username));
 
 
         if (userTbl == null)

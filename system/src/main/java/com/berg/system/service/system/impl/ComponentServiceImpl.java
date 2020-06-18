@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.berg.dao.sys.entity.ComponentTbl;
 import com.berg.dao.sys.entity.RoleComponentTbl;
-import com.berg.dao.sys.service.ComponentTblService;
-import com.berg.dao.sys.service.RoleComponentTblService;
+import com.berg.dao.sys.service.ComponentTblDao;
+import com.berg.dao.sys.service.RoleComponentTblDao;
 import com.berg.system.service.system.ComponentService;
 import com.berg.system.authentication.JWTUtil;
 import com.berg.vo.common.ListVo;
@@ -27,9 +27,9 @@ public class ComponentServiceImpl implements ComponentService {
     @Autowired
     JWTUtil jWTUtil;
     @Autowired
-    ComponentTblService componentTblService;
+    ComponentTblDao componentTblDao;
     @Autowired
-    RoleComponentTblService roleComponentTblService;
+    RoleComponentTblDao roleComponentTblDao;
 
     /**
      * 获取组件树形列表
@@ -45,7 +45,7 @@ public class ComponentServiceImpl implements ComponentService {
                 .eq("isdel",0)
                 .eq("parent_id",0)
                 .orderByAsc("no");
-        List<ComponentTbl> componentTblList = componentTblService.list(queryWrapper);
+        List<ComponentTbl> componentTblList = componentTblDao.list(queryWrapper);
         componentTblList.forEach(item -> {
             ComponentTreeVo tree = new ComponentTreeVo();
             BeanUtils.copyProperties(item, tree);
@@ -69,7 +69,7 @@ public class ComponentServiceImpl implements ComponentService {
                 .eq("isdel",0)
                 .eq("parent_id",id)
                 .orderByAsc("no");
-        List<ComponentTbl> componentTblList = componentTblService.list(queryWrapper);
+        List<ComponentTbl> componentTblList = componentTblDao.list(queryWrapper);
         componentTblList.forEach(item -> {
             ComponentTreeVo tree = new ComponentTreeVo();
             BeanUtils.copyProperties(item, tree);
@@ -88,7 +88,7 @@ public class ComponentServiceImpl implements ComponentService {
      */
     @Override
     public ComponentEditVo getCom(Integer id) {
-        ComponentEditVo result = componentTblService.getById(id,ComponentEditVo.class);
+        ComponentEditVo result = componentTblDao.getById(id,ComponentEditVo.class);
         return result;
     }
 
@@ -156,7 +156,7 @@ public class ComponentServiceImpl implements ComponentService {
             componentTbl.setCreateUser(operator);
             componentTbl.setIsdel(0);
         }
-        componentTblService.saveOrUpdate(componentTbl);
+        componentTblDao.saveOrUpdate(componentTbl);
         return componentTbl.getId();
     }
 
@@ -167,27 +167,27 @@ public class ComponentServiceImpl implements ComponentService {
      */
     void delCom(Integer id) {
         LocalDateTime now = LocalDateTime.now();
-        ComponentTbl componentTbl = componentTblService.getById(id);
+        ComponentTbl componentTbl = componentTblDao.getById(id);
         if (componentTbl != null) {
             String operator = jWTUtil.getUsername();
             componentTbl.setIsdel(1);
             componentTbl.setDelTime(now);
             componentTbl.setDelUser(operator);
-            componentTblService.updateById(componentTbl);
+            componentTblDao.updateById(componentTbl);
             //作废原有授权数据
             RoleComponentTbl roleComponentTbl = new RoleComponentTbl();
             roleComponentTbl.setComId(id);
             roleComponentTbl.setIsdel(0);
             LambdaQueryWrapper queryWrapper = new LambdaQueryWrapper<RoleComponentTbl>()
                     .eq(RoleComponentTbl::getComId,id).eq(RoleComponentTbl::getIsdel,0);
-            List<RoleComponentTbl> updateList = roleComponentTblService.list(queryWrapper);
+            List<RoleComponentTbl> updateList = roleComponentTblDao.list(queryWrapper);
             if (updateList.size() > 0) {
                 updateList.forEach(item -> {
                     item.setIsdel(1);
                     item.setDelTime(now);
                     item.setDelUser(operator);
                 });
-                roleComponentTblService.updateBatchById(updateList);
+                roleComponentTblDao.updateBatchById(updateList);
             }
         }
     }

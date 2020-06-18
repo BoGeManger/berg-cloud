@@ -8,6 +8,10 @@ spring:
     active: dev
   application:
     name: gateway
+  boot:
+    admin:
+      client:
+        url: localhost:30000
   cloud:
     nacos:
       discovery:
@@ -37,3 +41,20 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 700000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        #开放所有页面节点  默认只开启了health、info两个节点
+        include: '*'
+  endpoint:
+    health:
+      #显示健康具体信息  默认不会显示详细信息
+      show-details: always
+
+logging:
+  file: ./log/sys-err.log
+  #配置日志级别
+#  level:
+#    root: debug

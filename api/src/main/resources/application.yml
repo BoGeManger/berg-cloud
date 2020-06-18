@@ -10,9 +10,15 @@ spring:
     active: dev
   application:
     name: openapi
+  boot:
+    admin:
+      client:
+        url: localhost:30000
   cloud:
     nacos:
       discovery:
+        metadata:
+          servlet.context-path: /openapi
         server-addr: 172.16.10.19:8848
   servlet:
     multipart:
@@ -36,5 +42,22 @@ ribbon:
   eureka:
      enabled: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        #开放所有页面节点  默认只开启了health、info两个节点
+        include: '*'
+  endpoint:
+    health:
+      #显示健康具体信息  默认不会显示详细信息
+      show-details: always
+
 swagger:
   enabled: false
+
+logging:
+  file: ./log/sys-err.log
+  #配置日志级别
+#  level:
+#    root: debug
