@@ -8,7 +8,9 @@ import com.berg.vo.common.EntityIdVo;
 import com.berg.vo.system.RoleEditVo;
 import com.berg.vo.system.RoleVo;
 import com.berg.vo.system.in.GetRolePageInVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RoleFallback implements RoleService {
 
 
@@ -33,7 +35,7 @@ public class RoleFallback implements RoleService {
     }
 
     @Override
-    public Result<Boolean> delRole(EntityIdVo<Integer> input) {
+    public Result delRole(EntityIdVo<Integer> input) {
         return new Result(MessageConstant.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试","");
     }
 }

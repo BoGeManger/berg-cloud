@@ -5,7 +5,9 @@ import com.berg.message.MessageConstant;
 import com.berg.message.Result;
 import com.berg.vo.system.in.LoginInVo;
 import com.berg.vo.system.out.LoginOutVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoginFallback implements LoginService {
 
     @Override

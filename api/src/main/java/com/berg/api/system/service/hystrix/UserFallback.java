@@ -9,7 +9,9 @@ import com.berg.vo.system.UserEditVo;
 import com.berg.vo.system.UserVo;
 import com.berg.vo.system.in.GetUserPageInVo;
 import com.berg.vo.system.in.UpdatePasswordInVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserFallback implements UserService {
 
 

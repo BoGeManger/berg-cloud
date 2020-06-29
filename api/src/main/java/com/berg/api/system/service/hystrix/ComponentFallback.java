@@ -3,11 +3,10 @@ package com.berg.api.system.service.hystrix;
 import com.berg.api.system.service.ComponentService;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
-import com.berg.vo.common.ListVo;
-import com.berg.vo.system.ComponentEditVo;
-import com.berg.vo.system.ComponentTreeVo;
 import com.berg.vo.system.in.OperatorBatchComInVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ComponentFallback implements ComponentService {
 
     @Override

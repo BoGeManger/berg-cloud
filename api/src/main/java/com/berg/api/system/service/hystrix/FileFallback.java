@@ -9,10 +9,12 @@ import com.berg.vo.system.FilePathVo;
 import com.berg.vo.system.FileVo;
 import com.berg.vo.system.in.DelFileByNameInVo;
 import com.berg.vo.system.in.GetFilePageInVo;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
+@Component
 public class FileFallback implements FileService {
     
     @Override

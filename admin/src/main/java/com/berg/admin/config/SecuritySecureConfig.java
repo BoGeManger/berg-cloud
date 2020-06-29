@@ -35,7 +35,7 @@ public class SecuritySecureConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and()
                 .logout().logoutUrl(adminContextPath + "/logout").and()
                 //启用HTTP-Basic支持。这是Spring Boot Admin Client注册所必需的
-                .httpBasic().and();
+                .httpBasic().and().csrf().disable();
         // @formatter:on
     }
 }

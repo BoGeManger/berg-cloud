@@ -1,14 +1,14 @@
 package com.berg.api.system.service.hystrix;
 
 import com.berg.api.system.service.QuartzJobService;
-import com.berg.dao.page.PageInfo;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
 import com.berg.vo.common.EntityIdVo;
 import com.berg.vo.system.JobEditVo;
-import com.berg.vo.system.JobVo;
 import com.berg.vo.system.in.GetJobPageInVo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class QuartzJobFallback implements QuartzJobService {
     
     @Override
