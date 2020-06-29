@@ -1,0 +1,23 @@
+server:
+  port: 30000
+  servlet:
+    context-path: /
+  tomcat:
+    max-http-post-size: -1
+
+spring:
+  profiles:
+    active: prod
+  application:
+    name: admin
+  security:
+    user:
+      name: admin
+      password: admin
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.16.10.19:8848
+      metadata:
+        user.name: admin
+        user.password: admin

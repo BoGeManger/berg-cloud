@@ -126,7 +126,7 @@
                 <directory>${package.environment}</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>application.yml</include>
+                    <include>bootstrap.yml</include>
                 </includes>
             </resource>
 
