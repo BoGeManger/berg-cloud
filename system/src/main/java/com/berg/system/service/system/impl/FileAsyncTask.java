@@ -1,8 +1,8 @@
 package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.berg.dao.sys.entity.FileTbl;
-import com.berg.dao.sys.service.FileTblDao;
+import com.berg.dao.system.sys.entity.FileTbl;
+import com.berg.dao.system.sys.service.FileTblDao;
 import com.berg.vo.system.FilePathVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

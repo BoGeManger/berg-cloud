@@ -2,10 +2,10 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.berg.dao.sys.entity.ComponentTbl;
-import com.berg.dao.sys.entity.RoleComponentTbl;
-import com.berg.dao.sys.service.ComponentTblDao;
-import com.berg.dao.sys.service.RoleComponentTblDao;
+import com.berg.dao.system.sys.entity.ComponentTbl;
+import com.berg.dao.system.sys.entity.RoleComponentTbl;
+import com.berg.dao.system.sys.service.ComponentTblDao;
+import com.berg.dao.system.sys.service.RoleComponentTblDao;
 import com.berg.system.service.system.ComponentService;
 import com.berg.system.authentication.JWTUtil;
 import com.berg.vo.common.ListVo;

@@ -108,7 +108,7 @@ management:
       show-details: always
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:/**/mapper/**/*.xml
   global-config:
     banner: false
   configuration:

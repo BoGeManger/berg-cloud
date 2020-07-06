@@ -2,8 +2,8 @@ package com.berg.system.authentication;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.berg.constant.RedisKeyConstants;
-import com.berg.dao.sys.entity.UserTbl;
-import com.berg.dao.sys.service.UserTblDao;
+import com.berg.dao.system.sys.entity.UserTbl;
+import com.berg.dao.system.sys.service.UserTblDao;
 import com.berg.system.service.system.LoginService;
 import com.berg.system.constant.SystemConstans;
 import com.berg.utils.DesUtil;

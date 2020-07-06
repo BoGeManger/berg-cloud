@@ -1,8 +1,8 @@
 package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.berg.dao.sys.entity.OrganizationTbl;
-import com.berg.dao.sys.service.OrganizationTblDao;
+import com.berg.dao.system.sys.entity.OrganizationTbl;
+import com.berg.dao.system.sys.service.OrganizationTblDao;
 import com.berg.system.service.system.OrganizationService;
 import com.berg.system.authentication.JWTUtil;
 import com.berg.vo.common.ListVo;
