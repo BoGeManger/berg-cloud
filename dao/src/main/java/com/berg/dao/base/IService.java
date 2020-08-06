@@ -1,8 +1,8 @@
 package com.berg.dao.base;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.berg.vo.common.PageInVo;
 import com.github.pagehelper.PageInfo;
-import com.maiyou.vo.common.PageInVo;
 
 import java.util.Collection;
 import java.util.List;

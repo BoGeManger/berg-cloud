@@ -81,18 +81,6 @@ spring:
       minIdle: 0
     port: 6379
     timeout: 0
-  rabbitmq:
-    host: 172.16.10.19
-    port: 5672
-    username: admin
-    password: admin
-    publisher-confirms: true
-    publisher-returns: true
-    listener:
-      direct:
-        acknowledge-mode: manual
-      simple:
-        acknowledge-mode: manual
   kafka:
     bootstrap-servers: 172.16.10.19:9092
     producer:
