@@ -1,6 +1,7 @@
 package com.berg.dao.system.sys.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.berg.dao.system.sys.entity.FileTbl;
 import com.berg.dao.system.sys.mapper.FileTblMapper;
 import com.berg.dao.system.sys.service.FileTblDao;
@@ -21,6 +22,7 @@ public class FileTblDaoImpl extends ServiceImpl<FileTblMapper, FileTbl> implemen
 
     @Override
     public FileTblMapper getMapper(){
+      DynamicDataSourceContextHolder.push("system");
       return this.getBaseMapper();
     }
 }

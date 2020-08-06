@@ -1,6 +1,7 @@
 package com.berg.dao.system.sys.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.berg.dao.system.sys.entity.ComponentTbl;
 import com.berg.dao.system.sys.mapper.ComponentTblMapper;
 import com.berg.dao.system.sys.service.ComponentTblDao;
@@ -21,6 +22,7 @@ public class ComponentTblDaoImpl extends ServiceImpl<ComponentTblMapper, Compone
 
     @Override
     public ComponentTblMapper getMapper(){
+      DynamicDataSourceContextHolder.push("system");
       return this.getBaseMapper();
     }
 }

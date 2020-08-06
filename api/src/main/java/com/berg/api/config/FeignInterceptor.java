@@ -25,10 +25,16 @@ public class FeignInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
+        if(attributes!=null){
             HttpServletRequest request = attributes.getRequest();
-            //将token信息放入header中
-            template.header("Authentication",request.getHeader("Authentication"));
+            Enumeration<String> headerNames = request.getHeaderNames();
+            if (headerNames != null) {
+                while (headerNames.hasMoreElements()) {
+                    String name = headerNames.nextElement();
+                    String values = request.getHeader(name);
+                    template.header(name, values);
+                }
+            }
         }
 
         //GET请求参数实体转换

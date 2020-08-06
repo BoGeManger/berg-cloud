@@ -1,6 +1,7 @@
 package com.berg.dao.system.sys.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.berg.dao.system.sys.entity.RoleComponentTbl;
 import com.berg.dao.system.sys.mapper.RoleComponentTblMapper;
 import com.berg.dao.system.sys.service.RoleComponentTblDao;
@@ -21,6 +22,7 @@ public class RoleComponentTblDaoImpl extends ServiceImpl<RoleComponentTblMapper,
 
     @Override
     public RoleComponentTblMapper getMapper(){
+      DynamicDataSourceContextHolder.push("system");
       return this.getBaseMapper();
     }
 }

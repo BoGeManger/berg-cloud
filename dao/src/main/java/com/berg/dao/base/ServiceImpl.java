@@ -1,15 +1,81 @@
 package com.berg.dao.base;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.maiyou.vo.common.PageInVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.binding.MapperMethod;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 @Slf4j
 public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomidou.mybatisplus.extension.service.impl.ServiceImpl<M, T> implements IService<T> {
 
+    //region mybatis-plus方法重写
+    @Override
+    public boolean saveBatch(Collection<T> entityList, int batchSize) {
+        String sqlStatement = sqlStatement(SqlMethod.INSERT_ONE);
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+    }
+
+    @Override
+    public boolean saveOrUpdate(T entity) {
+        if (null != entity) {
+            Class<?> cls = entity.getClass();
+            TableInfo tableInfo = TableInfoHelper.getTableInfo(cls);
+            Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+            String keyProperty = tableInfo.getKeyProperty();
+            Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+            Object idVal = ReflectionKit.getFieldValue(entity, tableInfo.getKeyProperty());
+            return StringUtils.checkValNull(idVal) || Objects.isNull(getById((Serializable) idVal)) ? save(entity) : updateById(entity);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
+        Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            Object idVal = ReflectionKit.getFieldValue(entity, keyProperty);
+            if (StringUtils.checkValNull(idVal) || Objects.isNull(getById((Serializable) idVal))) {
+                sqlSession.insert(tableInfo.getSqlStatement(SqlMethod.INSERT_ONE.getMethod()), entity);
+            } else {
+                MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, entity);
+                sqlSession.update(tableInfo.getSqlStatement(SqlMethod.UPDATE_BY_ID.getMethod()), param);
+            }
+        });
+    }
+
+    @Override
+    public boolean updateBatchById(Collection<T> entityList, int batchSize) {
+        String sqlStatement = sqlStatement(SqlMethod.UPDATE_BY_ID);
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+            param.put(Constants.ENTITY, entity);
+            sqlSession.update(sqlStatement, param);
+        });
+    }
+    //endregion
+
+    @Override
     public <E> E getById(java.io.Serializable id,Class<E> cls){
         E target = null;
         try{
@@ -24,6 +90,7 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
         return target;
     }
 
+    @Override
     public <E> E getOne(Wrapper<T> queryWrapper,Class<E> cls){
         E target = null;
         try{
@@ -38,6 +105,7 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
         return target;
     }
 
+    @Override
     public <E> List<E> list(Wrapper<T> queryWrapper,Class<E> cls){
         List<E> target = new ArrayList<>();
         List<T> source = list(queryWrapper);
@@ -51,5 +119,21 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
             log.error("实体转换失败:"+ex.getMessage());
         }
         return target;
+    }
+
+    @Override
+    public <I extends PageInVo,E> PageInfo<E> page(I input, Supplier<List<E>> function) {
+        PageHelper.startPage(input.getPageIndex(), input.getPageSize());
+        List<E> list = function.get();
+        PageInfo<E> page = new PageInfo<E>(list);
+        return page;
+    }
+
+    @Override
+    public <E> PageInfo<E> page(int pageIndex,int pageSize, Supplier<List<E>> function) {
+        PageHelper.startPage(pageIndex, pageSize);
+        List<E> list = function.get();
+        PageInfo<E> page = new PageInfo<E>(list);
+        return page;
     }
 }

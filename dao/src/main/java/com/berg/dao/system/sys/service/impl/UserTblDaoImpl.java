@@ -1,6 +1,7 @@
 package com.berg.dao.system.sys.service.impl;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.berg.dao.system.sys.entity.UserTbl;
 import com.berg.dao.system.sys.mapper.UserTblMapper;
 import com.berg.dao.system.sys.service.UserTblDao;
@@ -21,6 +22,7 @@ public class UserTblDaoImpl extends ServiceImpl<UserTblMapper, UserTbl> implemen
 
     @Override
     public UserTblMapper getMapper(){
+      DynamicDataSourceContextHolder.push("system");
       return this.getBaseMapper();
     }
 }
