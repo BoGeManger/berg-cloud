@@ -8,6 +8,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,7 +39,16 @@ public class GlobalExceptionHandler {
 				errList.add(item.getDefaultMessage());
 			});
 			r = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
-		} else if (ex instanceof ConstraintViolationException) {
+		} else if (ex instanceof BindException) {
+			log.error("请求参数错误", ex);
+			List<String> errList = new ArrayList<>();
+			BindException e = (BindException) ex;
+			List<ObjectError> list = e.getBindingResult().getAllErrors();
+			list.forEach(item -> {
+				errList.add(item.getDefaultMessage());
+			});
+			r = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
+		}else if (ex instanceof ConstraintViolationException) {
 			log.error("请求参数错误", ex);
 			ConstraintViolationException e = (ConstraintViolationException) ex;
 			String errMsg = e.getConstraintViolations().stream().map((cv) -> cv.getMessage()).collect(Collectors.joining(";"));
