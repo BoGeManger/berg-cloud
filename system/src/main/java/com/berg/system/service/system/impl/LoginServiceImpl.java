@@ -163,4 +163,16 @@ public class LoginServiceImpl implements LoginService {
         return  flag;
     }
 
+    /**
+     * 退出登录
+     */
+    @Override
+    public void logout(){
+        String token =  jWTUtil.getToken();
+        if(StringUtils.isNotBlank(token)){
+            String key = String.format(RedisKeyConstants.System.SYSTEM_TOKEN, token);
+            stringTemplate.delete(key);
+        }
+    }
+
 }
