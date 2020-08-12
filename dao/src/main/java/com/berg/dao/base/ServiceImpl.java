@@ -1,6 +1,8 @@
 package com.berg.dao.base;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -94,6 +96,52 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
     public <E> E getOne(Wrapper<T> queryWrapper,Class<E> cls){
         E target = null;
         try{
+            T source = getOne(queryWrapper);
+            if(source!=null){
+                target = cls.newInstance();
+                BeanUtils.copyProperties(source, target);
+            }
+        }catch (Exception ex){
+            log.error("实体转换失败:"+ex.getMessage());
+        }
+        return target;
+    }
+
+    @Override
+    public T getOneLimit(QueryWrapper<T> queryWrapper){
+        queryWrapper.last("limit 1");
+        T entity = getOne(queryWrapper);
+        return entity;
+    }
+
+    @Override
+    public T getOneLimit(LambdaQueryWrapper<T> queryWrapper){
+        queryWrapper.last("limit 1");
+        T entity = getOne(queryWrapper);
+        return entity;
+    }
+
+    @Override
+    public <E> E getOneLimit(QueryWrapper<T> queryWrapper,Class<E> cls){
+        E target = null;
+        try{
+            queryWrapper.last("limit 1");
+            T source = getOne(queryWrapper);
+            if(source!=null){
+                target = cls.newInstance();
+                BeanUtils.copyProperties(source, target);
+            }
+        }catch (Exception ex){
+            log.error("实体转换失败:"+ex.getMessage());
+        }
+        return target;
+    }
+
+    @Override
+    public <E> E getOneLimit(LambdaQueryWrapper<T> queryWrapper,Class<E> cls){
+        E target = null;
+        try{
+            queryWrapper.last("limit 1");
             T source = getOne(queryWrapper);
             if(source!=null){
                 target = cls.newInstance();

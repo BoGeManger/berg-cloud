@@ -1,6 +1,8 @@
 package com.berg.dao.base;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.berg.vo.common.PageInVo;
 import com.github.pagehelper.PageInfo;
 
@@ -33,6 +35,14 @@ public interface IService<T>  extends com.baomidou.mybatisplus.extension.service
     <E> E getById(java.io.Serializable id,Class<E> cls);
 
     <E> E getOne(Wrapper<T> queryWrapper,Class<E> cls);
+
+    T getOneLimit(QueryWrapper<T> queryWrapper);
+
+    T getOneLimit(LambdaQueryWrapper<T> queryWrapper);
+
+    <E> E getOneLimit(QueryWrapper<T> queryWrapper,Class<E> cls);
+
+    <E> E getOneLimit(LambdaQueryWrapper<T> queryWrapper,Class<E> cls);
 
     <E> List<E> list(Wrapper<T> queryWrapper, Class<E> cls);
 
