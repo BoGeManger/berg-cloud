@@ -70,7 +70,7 @@ public class MybatisplusGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
 //        pc.setModuleName("sys");
-        pc.setParent("com.maiyou.dao.system");
+        pc.setParent("com.berg.dao.system");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -117,9 +117,9 @@ public class MybatisplusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperMapperClass("com.maiyou.dao.base.BaseMapper");
-        strategy.setSuperServiceImplClass("com.maiyou.dao.base.ServiceImpl");
-        strategy.setSuperServiceClass("com.maiyou.dao.base.IService");
+        strategy.setSuperMapperClass("com.berg.dao.base.BaseMapper");
+        strategy.setSuperServiceImplClass("com.berg.dao.base.ServiceImpl");
+        strategy.setSuperServiceClass("com.berg.dao.base.IService");
 
         strategy.setEntityLombokModel(true);
         strategy.setChainModel(true);
