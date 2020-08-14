@@ -50,14 +50,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageInfo<UserVo> getUserPage(GetUserPageInVo input) {
-        PageHelper.startPage(input.getPageIndex(), input.getPageSize());
-        QueryWrapper query = new QueryWrapper<UserTbl>().eq("isdel", 0);
-        if (StringUtils.isNotBlank(input.getUsername())) {
-            query.like("username", input.getUsername());
-        }
-        query.orderByDesc("modify_time");
-        List<UserVo> list = userTblDao.list(query,UserVo.class);
-        PageInfo<UserVo> page = new PageInfo<>(list);
+        PageInfo<UserVo> page = userTblDao.page(input,()->{
+            QueryWrapper query = new QueryWrapper<UserTbl>().eq("isdel", 0);
+            if (StringUtils.isNotBlank(input.getUsername())) {
+                query.like("username", input.getUsername());
+            }
+            query.orderByDesc("modify_time");
+            return userTblDao.list(query,UserVo.class);
+        });
         return page;
     }
 

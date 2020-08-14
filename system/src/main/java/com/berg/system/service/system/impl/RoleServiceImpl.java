@@ -40,15 +40,15 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public PageInfo<RoleVo> getRolePage(GetRolePageInVo input){
-        PageHelper.startPage(input.getPageIndex(), input.getPageSize());
-        QueryWrapper query = new QueryWrapper<RoleTbl>()
-                .eq("isdel",0);
-        if(StringUtils.isNotBlank(input.getName())){
-            query.like("name",input.getName());
-        }
-        query.orderByDesc("modify_time");
-        List<RoleVo> list = roleTblDao.list(query,RoleVo.class);
-        PageInfo<RoleVo> page = new PageInfo<>(list);
+        PageInfo<RoleVo> page = roleTblDao.page(input,()->{
+            QueryWrapper query = new QueryWrapper<RoleTbl>()
+                    .eq("isdel",0);
+            if(StringUtils.isNotBlank(input.getName())){
+                query.like("name",input.getName());
+            }
+            query.orderByDesc("modify_time");
+            return roleTblDao.list(query,RoleVo.class);
+        });
         return page;
     }
 

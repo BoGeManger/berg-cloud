@@ -42,20 +42,20 @@ public class QuartzJobServiceImpl implements QuartzJobService {
      */
     @Override
     public PageInfo<JobVo> getJobPage(GetJobPageInVo input){
-        PageHelper.startPage(input.getPageIndex(), input.getPageSize());
-        QueryWrapper query = new QueryWrapper<QuartzJobTbl>().eq("isdel",0);
-        if(StringUtils.isNotBlank(input.getName())){
-            query.like("name",input.getName());
-        }
-        if(StringUtils.isNotBlank(input.getJobClassName())){
-            query.like("job_class_name",input.getJobClassName());
-        }
-        if(input.getStatus()!=null && input.getStatus()!=-1){
-            query.eq("status",input.getStatus());
-        }
-        query.orderByDesc("create_time");
-        List<JobVo> list = quartzJobTblDao.list(query,JobVo.class);
-        PageInfo<JobVo> page = new PageInfo<>(list);
+        PageInfo<JobVo> page = quartzJobTblDao.page(input,()->{
+            QueryWrapper query = new QueryWrapper<QuartzJobTbl>().eq("isdel",0);
+            if(StringUtils.isNotBlank(input.getName())){
+                query.like("name",input.getName());
+            }
+            if(StringUtils.isNotBlank(input.getJobClassName())){
+                query.like("job_class_name",input.getJobClassName());
+            }
+            if(input.getStatus()!=null && input.getStatus()!=-1){
+                query.eq("status",input.getStatus());
+            }
+            query.orderByDesc("create_time");
+            return quartzJobTblDao.list(query,JobVo.class);
+        });
         return page;
     }
 

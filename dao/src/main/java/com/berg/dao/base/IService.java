@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.berg.vo.common.PageInVo;
-import com.github.pagehelper.PageInfo;
+import com.berg.dao.page.PageInfo;
 
 import java.util.Collection;
 import java.util.List;

@@ -38,22 +38,22 @@ public class FileServiceImpl  implements FileService {
      */
     @Override
     public PageInfo<FileVo> getFilePage(GetFilePageInVo input){
-        PageHelper.startPage(input.getPageIndex(), input.getPageSize());
-        QueryWrapper query = new QueryWrapper<FileTbl>().eq("isdel",0);
-        if(StringUtils.isNotBlank(input.getName())) {
-            query.eq("name",input.getName());
-        }
-        if(StringUtils.isNotBlank(input.getCode())) {
-            query.eq("code",input.getCode());
-        }
-        if(input.getType()!=null){
-            if(input.getType()!=-1){
-                query.eq("type",input.getType());
+        PageInfo<FileVo> page = fileTblDao.page(input,()->{
+            QueryWrapper query = new QueryWrapper<FileTbl>().eq("isdel",0);
+            if(StringUtils.isNotBlank(input.getName())) {
+                query.eq("name",input.getName());
             }
-        }
-        query.orderByDesc("create_time");
-        List<FileVo> list = fileTblDao.list(query,FileVo.class);
-        PageInfo<FileVo> page = new PageInfo<>(list);
+            if(StringUtils.isNotBlank(input.getCode())) {
+                query.eq("code",input.getCode());
+            }
+            if(input.getType()!=null){
+                if(input.getType()!=-1){
+                    query.eq("type",input.getType());
+                }
+            }
+            query.orderByDesc("create_time");
+            return fileTblDao.list(query,FileVo.class);
+        });
         return page;
     }
 
