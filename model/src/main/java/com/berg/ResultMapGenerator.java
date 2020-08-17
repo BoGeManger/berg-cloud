@@ -1,6 +1,6 @@
-package com.berg.dao;
+package com.berg;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Scanner;
