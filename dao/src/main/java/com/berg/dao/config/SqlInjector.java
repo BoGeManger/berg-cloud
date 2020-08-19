@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author nieqiurong 2018/8/11 20:23.
  */
-public class MySqlInjector extends DefaultSqlInjector {
+public class SqlInjector extends DefaultSqlInjector {
 
     @Override
     public List<AbstractMethod> getMethodList(Class<?> mapperClass) {

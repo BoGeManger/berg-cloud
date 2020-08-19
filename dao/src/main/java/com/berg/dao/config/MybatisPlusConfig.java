@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class MybatisPlusConfig {
 
     @Bean
-    public MySqlInjector sqlInjector() {
-        return new MySqlInjector();
+    public SqlInjector sqlInjector() {
+        return new SqlInjector();
     }
 }
