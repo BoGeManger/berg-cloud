@@ -18,6 +18,8 @@ public interface IService<T>  extends com.baomidou.mybatisplus.extension.service
         return saveBatch(entityList, DEFAULT_BATCH_SIZE);
     }
 
+    boolean saveBatch(Collection<T> entityList, int batchSize);
+
     @Override
     boolean saveOrUpdate(T entity);
 
@@ -26,11 +28,21 @@ public interface IService<T>  extends com.baomidou.mybatisplus.extension.service
         return saveOrUpdateBatch(entityList, DEFAULT_BATCH_SIZE);
     }
 
+    boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize);
+
     @Override
     default boolean updateBatchById(Collection<T> entityList) {
-        return updateBatchById(entityList, DEFAULT_BATCH_SIZE);
+        return this.updateBatchById(entityList, DEFAULT_BATCH_SIZE);
     }
+
+    boolean updateBatchById(Collection<T> entityList, int batchSize);
     //endregion
+
+    default boolean saveOrUpdateBatchById(Collection<T> entityList){
+        return  saveOrUpdateBatchById(entityList, DEFAULT_BATCH_SIZE);
+    }
+
+    boolean saveOrUpdateBatchById(Collection<T> entityList , int batchSize);
 
     <E> E getById(java.io.Serializable id,Class<E> cls);
 

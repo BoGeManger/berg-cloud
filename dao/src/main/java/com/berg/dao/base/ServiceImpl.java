@@ -79,6 +79,31 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
     //endregion
 
     @Override
+    public boolean saveOrUpdateBatchById(Collection<T> entityList, int batchSize) {
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
+        Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            Object idVal = ReflectionKit.getFieldValue(entity, keyProperty);
+            Boolean isAdd = false;
+            if(StringUtils.checkValNull(idVal)){
+                isAdd = true;
+            }
+            if (idVal.equals(0)) {
+                isAdd = true;
+            }
+            if (isAdd) {
+                sqlSession.insert(tableInfo.getSqlStatement(SqlMethod.INSERT_ONE.getMethod()), entity);
+            } else {
+                MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, entity);
+                sqlSession.update(tableInfo.getSqlStatement(SqlMethod.UPDATE_BY_ID.getMethod()), param);
+            }
+        });
+    }
+
+    @Override
     public <E> E getById(java.io.Serializable id,Class<E> cls){
         E target = null;
         try{
