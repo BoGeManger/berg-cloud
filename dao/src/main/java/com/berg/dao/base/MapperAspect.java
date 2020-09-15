@@ -1,4 +1,4 @@
-package com.berg.dao.aspect;
+package com.berg.dao.base;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import org.aspectj.lang.annotation.After;
