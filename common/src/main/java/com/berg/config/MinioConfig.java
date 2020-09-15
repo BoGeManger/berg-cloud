@@ -10,26 +10,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MinioConfig {
 
-    @Value(value = "${minio.minio_url}")
-    String minioUrl;
-    @Value(value = "${minio.minio_name}")
-    String minioName;
-    @Value(value = "${minio.minio_pass}")
-    String minioPass;
+    @Value(value = "${minio.url}")
+    String url;
+    @Value(value = "${minio.name}")
+    String name;
+    @Value(value = "${minio.password}")
+    String password;
     @Value(value = "${minio.bucketName}")
     String bucketName;
 
     @Bean
     public void initMinio(){
-        if(!minioUrl.startsWith("http")){
-            minioUrl = "http://" + minioUrl;
+        if(!url.startsWith("http")){
+            url = "http://" + url;
         }
-        if(!minioUrl.endsWith("/")){
-            minioUrl = minioUrl.concat("/");
+        if(!url.endsWith("/")){
+            url = url.concat("/");
         }
-        MinioUtil.setMinioUrl(minioUrl);
-        MinioUtil.setMinioName(minioName);
-        MinioUtil.setMinioPass(minioPass);
+        MinioUtil.setMinioUrl(url);
+        MinioUtil.setMinioName(name);
+        MinioUtil.setMinioPass(password);
         MinioUtil.setBucketName(bucketName);
 
         //创建bucket

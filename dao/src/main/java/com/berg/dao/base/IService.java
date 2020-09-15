@@ -56,6 +56,8 @@ public interface IService<T>  extends com.baomidou.mybatisplus.extension.service
 
     <E> E getOneLimit(LambdaQueryWrapper<T> queryWrapper,Class<E> cls);
 
+    <E> List<E> list(Class<E> cls);
+
     <E> List<E> list(Wrapper<T> queryWrapper, Class<E> cls);
 
     <I extends PageInVo,E> PageInfo<E> page(I input, Supplier<List<E>> function);

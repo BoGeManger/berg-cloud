@@ -180,6 +180,22 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
     }
 
     @Override
+    public <E> List<E> list(Class<E> cls){
+        List<E> target = new ArrayList<>();
+        List<T> source = list();
+        try{
+            for (T item:source) {
+                E entity = cls.newInstance();;
+                BeanUtils.copyProperties(item, entity);
+                target.add(entity);
+            }
+        }catch (Exception ex){
+            log.error("实体转换失败:"+ex.getMessage());
+        }
+        return target;
+    }
+
+    @Override
     public <E> List<E> list(Wrapper<T> queryWrapper,Class<E> cls){
         List<E> target = new ArrayList<>();
         List<T> source = list(queryWrapper);
