@@ -17,7 +17,7 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  * @since ${date}
  */
 @DS("system")
-@Repository
+@Repository("system.${table.serviceImplName}")
 <#if kotlin>
 open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
 

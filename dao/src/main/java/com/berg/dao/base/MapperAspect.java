@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class MapperAspect {
 
-    @Pointcut("execution(public * com.berg.dao.*.*.mapper.*.*(..))")
+    @Pointcut("execution(public * com.berg.dao..*.mapper.*.*(..))")
     public void pointcut() {
     }
 

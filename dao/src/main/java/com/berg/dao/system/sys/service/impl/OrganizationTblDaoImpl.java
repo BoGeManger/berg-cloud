@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * @since 2020-06-18
  */
 @DS("system")
-@Repository
+@Repository("system.OrganizationTblDaoImpl")
 public class OrganizationTblDaoImpl extends ServiceImpl<OrganizationTblMapper, OrganizationTbl> implements OrganizationTblDao {
 
     @Override
