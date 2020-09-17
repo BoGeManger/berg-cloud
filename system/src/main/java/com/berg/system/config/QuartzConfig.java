@@ -1,5 +1,6 @@
 package com.berg.system.config;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import javax.sql.DataSource;
 
@@ -15,15 +17,15 @@ import javax.sql.DataSource;
 public class QuartzConfig {
 
     @Autowired
-    private DataSourceProperties dataSourceProperties;
+    DataSourceProperties dataSourceProperties;
 
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
-    public SchedulerFactoryBeanCustomizer schedulerFactoryBeanCustomizer() {
+    public SchedulerFactoryBean quartzScheduler() {
         DataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().build();
-        return schedulerFactoryBean -> {
-            schedulerFactoryBean.setDataSource(dataSource);
-            schedulerFactoryBean.setTransactionManager(new DataSourceTransactionManager(dataSource));
-        };
+        SchedulerFactoryBean quartzScheduler = new SchedulerFactoryBean();
+        quartzScheduler.setDataSource(dataSource);
+        quartzScheduler.setTransactionManager(new DataSourceTransactionManager(dataSource));
+        return quartzScheduler;
     }
 }

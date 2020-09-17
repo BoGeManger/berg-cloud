@@ -33,10 +33,22 @@ spring:
   quartz:
     job-store-type: jdbc
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/qrtzdb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8&rewriteBatchedStatements=true
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/basedb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8&rewriteBatchedStatements=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+      stat-view-servlet:
+        allow: 127.0.0.1
+        deny: ''
+        enabled: true
+        login-password: druid
+        login-username: druid
+        reset-enable: false
+        url-pattern: /druid/*
     dynamic:
       primary: system #设置默认的数据源或者数据源组,默认值即为master
       strict: false #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源
@@ -62,18 +74,6 @@ spring:
             maxPoolPreparedStatementPerConnectionSize: 20
             filters: stat,wall
             connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-            #druid sql监控服务
-        #            web-stat-filter:
-        #              enabled: true
-        #              url-pattern: /*
-        #            stat-view-servlet:
-        #              allow: 127.0.0.1
-        #              deny: ''
-        #              enabled: true
-        #              login-password: druid
-        #              login-username: druid
-        #              reset-enable: false
-        #              url-pattern: /druid/*
   redis:
     database: 0
     host: 172.16.10.19
