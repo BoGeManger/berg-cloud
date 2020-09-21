@@ -1,5 +1,6 @@
 package com.berg.system.service.system.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
@@ -76,6 +77,7 @@ public class RoleServiceImpl implements RoleService {
      * @param input
      * @return
      */
+    @DS("system")
     @Transactional
     @Override
     public Integer addRole(RoleEditVo input){
@@ -92,6 +94,7 @@ public class RoleServiceImpl implements RoleService {
      * @param input
      * @return
      */
+    @DS("system")
     @Transactional
     @Override
     public Integer updateRole(RoleEditVo input){
@@ -167,6 +170,7 @@ public class RoleServiceImpl implements RoleService {
      * 删除角色
      * @param id
      */
+    @DS("system")
     @Transactional
     @Override
     public void delRole(Integer id){

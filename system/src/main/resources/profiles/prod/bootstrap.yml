@@ -33,10 +33,6 @@ spring:
   quartz:
     job-store-type: jdbc
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/qrtzdb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8&rewriteBatchedStatements=true
-    username: root
-    password: 123456
 #    druid:
 #      web-stat-filter:
 #        enabled: true
@@ -126,6 +122,15 @@ shiro:
   urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login,/**/druid/**,/**/actuator/**
   accounts: admin
   expireTime: 7200
+
+xxl:
+  job:
+    admin:
+      addresses: http://172.16.10.19:8080/xxl-job-admin
+    executor:
+      appname: system
+      ip: 172.16.10.23
+      port: 9999
 
 files:
   temp:

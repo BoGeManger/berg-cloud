@@ -1,5 +1,6 @@
 package com.berg.system.service.system.impl;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
      * @param input
      * @return
      */
+    @DS("system")
     @Transactional
     @Override
     public Integer addUser(UserEditVo input) {
@@ -102,6 +104,7 @@ public class UserServiceImpl implements UserService {
      * @param input
      * @return
      */
+    @DS("system")
     @Transactional
     @Override
     public Integer updateUser(UserEditVo input) {
@@ -119,6 +122,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param id
      */
+    @DS("system")
     @Transactional
     @Override
     public void delUser(Integer id) {

@@ -29,6 +29,7 @@
         <module>api</module>
 
         <module>system</module>
+        <module>manager</module>
     </modules>
 
     <properties>

@@ -1,23 +1,37 @@
 package com.berg.system.task;
 
+import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.handler.annotation.XxlJob;
+import com.xxl.job.core.log.XxlJobLogger;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
-/**
- * 示例不带参定时任务
- * 
- * @Author Scott
- */
 @Slf4j
-public class SampleJob implements Job {
+@Component
+public class SampleJob {
 
-	@Override
-	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    /**
+     * 简单任务示例（Bean模式）
+     */
+    @XxlJob("demoJobHandler")
+    public ReturnT<String> demoJobHandler(String param) throws Exception {
+        log.info("demoJobHandler");
+        XxlJobLogger.log("XXL-JOB, Hello World.");
+        for (int i = 0; i < 5; i++) {
+            XxlJobLogger.log("beat at:" + i);
+            TimeUnit.SECONDS.sleep(2);
+        }
+        return ReturnT.SUCCESS;
+    }
 
-		log.info(String.format("普通定时任务SampleJob 时间：%s",LocalDateTime.now()));
-	}
 }
