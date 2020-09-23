@@ -25,47 +25,66 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex) {
-		Result r;
+		Result result = getResult(ex,true);
+		return new ResponseEntity<Object>(result, HttpStatus.OK);
+	}
+
+	public Result getResult(Throwable ex,Boolean islog){
+		Result result;
 		if (ex instanceof AppException) {
 			AppException e = (AppException) ex;
-			r = new Result(e.getErrorCode(), e.getErrorMsg(), null);
-			log.error(e.getErrorMsg());
+			result = new Result(e.getErrorCode(), e.getErrorMsg(), null);
+			if(islog){
+				log.error(e.getErrorMsg());
+			}
 		} else if (ex instanceof MethodArgumentNotValidException) {
-			log.error("请求参数错误", ex);
+			if(islog) {
+				log.error("请求参数错误", ex);
+			}
 			List<String> errList = new ArrayList<>();
 			MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
 			List<ObjectError> list = e.getBindingResult().getAllErrors();
 			list.forEach(item -> {
 				errList.add(item.getDefaultMessage());
 			});
-			r = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
+			result = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
 		} else if (ex instanceof BindException) {
-			log.error("请求参数错误", ex);
+			if(islog) {
+				log.error("请求参数错误", ex);
+			}
 			List<String> errList = new ArrayList<>();
 			BindException e = (BindException) ex;
 			List<ObjectError> list = e.getBindingResult().getAllErrors();
 			list.forEach(item -> {
 				errList.add(item.getDefaultMessage());
 			});
-			r = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
+			result = new Result(MessageConstant.PARAMETER_ERROR_CODE, StringUtils.join(errList, ";"), null);
 		}else if (ex instanceof ConstraintViolationException) {
-			log.error("请求参数错误", ex);
+			if(islog) {
+				log.error("请求参数错误", ex);
+			}
 			ConstraintViolationException e = (ConstraintViolationException) ex;
 			String errMsg = e.getConstraintViolations().stream().map((cv) -> cv.getMessage()).collect(Collectors.joining(";"));
-			r = new Result(MessageConstant.PARAMETER_ERROR_CODE, errMsg, null);
+			result = new Result(MessageConstant.PARAMETER_ERROR_CODE, errMsg, null);
 		} else if (ex instanceof AuthenticationException) {
-			log.error("授权错误", ex);
+			if(islog) {
+				log.error("授权错误", ex);
+			}
 			AuthenticationException e = (AuthenticationException) ex;
 			String errMsg = e.getMessage();
-			r = new Result(MessageConstant.UNAUTH_ERROR_CODE, errMsg, null);
+			result = new Result(MessageConstant.UNAUTH_ERROR_CODE, errMsg, null);
 		} else if (ex instanceof UnauthorizedException) {
-			log.error("授权错误", ex);
+			if(islog) {
+				log.error("授权错误", ex);
+			}
 			UnauthorizedException e = (UnauthorizedException) ex;
-			r = new Result(MessageConstant.USER_FRIENDLY_ERROR_CODE, "您没有对应的权限操作，请联系管理员授权", null);
+			result = new Result(MessageConstant.USER_FRIENDLY_ERROR_CODE, "您没有对应的权限操作，请联系管理员授权", null);
 		} else {
-			log.error("运行异常", ex);
-			r = new Result(MessageConstant.SYSTEM_ERROR_CODE, "运行异常", ex.getMessage());
+			if(islog) {
+				log.error("运行异常", ex);
+			}
+			result = new Result(MessageConstant.SYSTEM_ERROR_CODE, "运行异常", ex.getMessage());
 		}
-		return new ResponseEntity<Object>(r, HttpStatus.OK);
+		return result;
 	}
 }

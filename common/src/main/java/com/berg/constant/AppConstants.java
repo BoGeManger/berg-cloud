@@ -11,7 +11,7 @@ public  class AppConstants {
     @Value("${spring.application.name}")
     String appName;
     @Value("${server.port}")
-    String port;
+    Integer port;
 
     @Value("${snowflake.id.worker.workerId:0}")
     String workerId;

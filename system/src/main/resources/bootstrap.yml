@@ -68,6 +68,27 @@ spring:
             maxPoolPreparedStatementPerConnectionSize: 20
             filters: stat,wall
             connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        log:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/logdb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8&rewriteBatchedStatements=true
+          username: root
+          password: 123456
+          druid:
+            initialSize: 5
+            minIdle: 5
+            maxActive: 20
+            maxWait: 60000
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 300000
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            poolPreparedStatements: true
+            maxPoolPreparedStatementPerConnectionSize: 20
+            filters: stat,wall
+            connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   redis:
     database: 0
     host: 172.16.10.19
@@ -102,7 +123,7 @@ management:
       show-details: always
 
 mybatis-plus:
-  mapper-locations: classpath:/system/mapper/**/*.xml
+  mapper-locations: classpath:/system/mapper/**/*.xml,classpath:/log/mapper/**/*.xml
   global-config:
     banner: false
   configuration:

@@ -1,4 +1,4 @@
-package com.berg.dao.system;
+package com.berg.dao.log;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
@@ -58,7 +59,7 @@ public class MybatisplusGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/basedb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/logdb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8");
         // dsc.setSchemaName("public");postgresql使用
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
@@ -70,7 +71,7 @@ public class MybatisplusGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
 //        pc.setModuleName("sys");
-        pc.setParent("com.berg.dao.system");
+        pc.setParent("com.berg.dao.log");
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -91,7 +92,7 @@ public class MybatisplusGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/dao/src/main/resources/system/mapper/" + pc.getModuleName()
+                return projectPath + "/dao/src/main/resources/log/mapper/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -101,8 +102,8 @@ public class MybatisplusGenerator {
 
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setService("/system/templates/dao.java");//更改为null不输出dao
-        templateConfig.setServiceImpl("/system/templates/daoImpl.java");//更改为null不输出daoImpl
+        templateConfig.setService("/log/templates/dao.java");//更改为null不输出dao
+        templateConfig.setServiceImpl("/log/templates/daoImpl.java");//更改为null不输出daoImpl
         templateConfig.setXml(null);
         templateConfig.setController(null);
 
