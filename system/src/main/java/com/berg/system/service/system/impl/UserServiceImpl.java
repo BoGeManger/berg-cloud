@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
             LambdaQueryWrapper comQuery = new QueryWrapper<UserComponentTbl>().select("com_id").lambda()
                     .eq(UserComponentTbl::getIsdel, 0)
                     .eq(UserComponentTbl::getUserId, id);
-            result.setRoldIds(userComponentTblDao.listObjs(comQuery));
+            result.setComIds(userComponentTblDao.listObjs(comQuery));
         }
         return result;
     }
