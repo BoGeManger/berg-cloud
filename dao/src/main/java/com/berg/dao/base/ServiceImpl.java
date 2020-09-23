@@ -79,6 +79,34 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
     //endregion
 
     @Override
+    public boolean saveOrUpdateById(T entity) {
+        if (null != entity) {
+            Class<?> cls = entity.getClass();
+            TableInfo tableInfo = TableInfoHelper.getTableInfo(cls);
+            Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+            String keyProperty = tableInfo.getKeyProperty();
+            Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+            Object idVal = ReflectionKit.getFieldValue(entity, tableInfo.getKeyProperty());
+            Boolean isAdd = false;
+            if(StringUtils.checkValNull(idVal)){
+                isAdd = true;
+            }
+            if (idVal.equals(0)) {
+                isAdd = true;
+            }
+            if (idVal.equals("0")) {
+                isAdd = true;
+            }
+            if (isAdd) {
+                return  save(entity);
+            }else{
+                return updateById(entity);
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean saveOrUpdateBatchById(Collection<T> entityList, int batchSize) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
@@ -91,6 +119,9 @@ public abstract class ServiceImpl<M extends BaseMapper<T>, T> extends com.baomid
                 isAdd = true;
             }
             if (idVal.equals(0)) {
+                isAdd = true;
+            }
+            if (idVal.equals("0")) {
                 isAdd = true;
             }
             if (isAdd) {

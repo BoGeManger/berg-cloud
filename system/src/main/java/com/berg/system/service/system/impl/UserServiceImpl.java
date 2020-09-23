@@ -3,6 +3,8 @@ package com.berg.system.service.system.impl;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.berg.dao.system.sys.entity.UserComponentTbl;
+import com.berg.dao.system.sys.service.UserComponentTblDao;
 import com.github.pagehelper.PageHelper;
 import com.berg.dao.system.sys.entity.UserRoleTbl;
 import com.berg.dao.system.sys.entity.UserTbl;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRoleTblDao userRoleTblDao;
     @Autowired
+    UserComponentTblDao userComponentTblDao;
+    @Autowired
     RedisTemplate<String, String> stringTemplate;
 
     //默认密码为123456
@@ -72,10 +76,14 @@ public class UserServiceImpl implements UserService {
     public UserEditVo getUser(Integer id) {
         UserEditVo result = userTblDao.getById(id,UserEditVo.class);
         if(result!=null){
-            LambdaQueryWrapper query = new LambdaQueryWrapper<UserRoleTbl>()
+            LambdaQueryWrapper roleQuery = new QueryWrapper<UserRoleTbl>().select("role_id").lambda()
                     .eq(UserRoleTbl::getIsdel, 0)
                     .eq(UserRoleTbl::getUserId, id);
-            result.setRoldIds(userRoleTblDao.listObjs(query));
+            result.setRoldIds(userRoleTblDao.listObjs(roleQuery));
+            LambdaQueryWrapper comQuery = new QueryWrapper<UserComponentTbl>().select("com_id").lambda()
+                    .eq(UserComponentTbl::getIsdel, 0)
+                    .eq(UserComponentTbl::getUserId, id);
+            result.setRoldIds(userComponentTblDao.listObjs(comQuery));
         }
         return result;
     }
@@ -95,6 +103,9 @@ public class UserServiceImpl implements UserService {
         if (input.getRoldIds().size() > 0) {
             addOrUpdateUserRole(userId, input.getRoldIds(), operator);
         }
+        if(input.getComIds().size() > 0){
+            addOrUpdateUserCom(userId,input.getComIds(),operator);
+        }
         return userId;
     }
 
@@ -112,6 +123,9 @@ public class UserServiceImpl implements UserService {
         Integer userId = addOrUpdateUser(input, operator);
         if (input.getRoldIds().size() > 0) {
             addOrUpdateUserRole(userId, input.getRoldIds(), operator);
+        }
+        if(input.getComIds().size() > 0){
+            addOrUpdateUserCom(userId,input.getComIds(),operator);
         }
         delUserRoleCache(input.getUsername());
         return userId;
@@ -139,17 +153,30 @@ public class UserServiceImpl implements UserService {
             userTblDao.updateById(userTbl);
             delUserRoleCache(userTbl.getUsername());
             //作废原有数据
-            LambdaQueryWrapper query = new LambdaQueryWrapper<UserRoleTbl>()
+            LambdaQueryWrapper roleQuery = new LambdaQueryWrapper<UserRoleTbl>()
                     .eq(UserRoleTbl::getIsdel, 0)
                     .eq(UserRoleTbl::getUserId, userTbl.getId());
-            List<UserRoleTbl> updateList = userRoleTblDao.list(query);
-            if (updateList.size() > 0) {
-                updateList.forEach(item -> {
+            List<UserRoleTbl> roleUpdateList = userRoleTblDao.list(roleQuery);
+            if (roleUpdateList.size() > 0) {
+                roleUpdateList.forEach(item -> {
                     item.setIsdel(1);
                     item.setDelTime(now);
                     item.setDelUser(operator);
                 });
-                userRoleTblDao.updateBatchById(updateList);
+                userRoleTblDao.updateBatchById(roleUpdateList);
+            }
+            //作废原有数据
+            LambdaQueryWrapper comQuery = new LambdaQueryWrapper<UserComponentTbl>()
+                    .eq(UserComponentTbl::getIsdel, 0)
+                    .eq(UserComponentTbl::getUserId, userTbl.getId());
+            List<UserComponentTbl> comUpdateList = userComponentTblDao.list(comQuery);
+            if (comUpdateList.size() > 0) {
+                comUpdateList.forEach(item -> {
+                    item.setIsdel(1);
+                    item.setDelTime(now);
+                    item.setDelUser(operator);
+                });
+                userComponentTblDao.updateBatchById(comUpdateList);
             }
         }
     }
@@ -248,7 +275,7 @@ public class UserServiceImpl implements UserService {
             userTbl.setCreateUser(operator);
             userTbl.setIsdel(0);
         }
-        userTblDao.saveOrUpdate(userTbl);
+        userTblDao.saveOrUpdateById(userTbl);
         return userTbl.getId();
     }
 
@@ -271,7 +298,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 新增或修改授权信息
+     * 新增或修改用户角色信息
      *
      * @param userId
      * @param roldIds
@@ -304,6 +331,42 @@ public class UserServiceImpl implements UserService {
             addList.add(sysUserRoleTbl);
         });
         userRoleTblDao.saveBatch(addList);
+    }
+
+    /**
+     * 新增或修改用户授权信息
+     *
+     * @param userId
+     * @param comIds
+     * @param operator
+     */
+    void addOrUpdateUserCom(Integer userId, List<Integer> comIds, String operator) {
+        LocalDateTime now = LocalDateTime.now();
+        LambdaQueryWrapper query = new LambdaQueryWrapper<UserComponentTbl>()
+                .eq(UserComponentTbl::getIsdel,0)
+                .eq(UserComponentTbl::getUserId,userId);
+        List<UserComponentTbl> updateList = userComponentTblDao.list(query);
+        //作废原有数据
+        if (updateList.size() > 0) {
+            updateList.forEach(item -> {
+                item.setIsdel(1);
+                item.setDelTime(now);
+                item.setDelUser(operator);
+            });
+            userComponentTblDao.updateBatchById(updateList);
+        }
+        List<UserComponentTbl> addList = new ArrayList<>();
+        //新增授权数据
+        comIds.forEach(item -> {
+            UserComponentTbl userComponentTbl = new UserComponentTbl();
+            userComponentTbl.setComId(item);
+            userComponentTbl.setUserId(userId);
+            userComponentTbl.setCreateTime(now);
+            userComponentTbl.setCreateUser(operator);
+            userComponentTbl.setIsdel(0);
+            addList.add(userComponentTbl);
+        });
+        userComponentTblDao.saveBatch(addList);
     }
 
     /**

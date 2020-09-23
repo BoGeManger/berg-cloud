@@ -27,4 +27,6 @@ public class UserEditVo {
     String organizationName;
     @ApiModelProperty(value = "权限id集合")
     List<Integer> roldIds;
+    @ApiModelProperty(value = "组件id集合")
+    List<Integer> comIds;
 }

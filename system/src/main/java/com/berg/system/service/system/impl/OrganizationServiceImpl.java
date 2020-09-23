@@ -136,7 +136,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationTbl.setCreateTime(now);
             organizationTbl.setIsdel(0);
         }
-        organizationTblDao.saveOrUpdate(organizationTbl);
+        organizationTblDao.saveOrUpdateById(organizationTbl);
         return organizationTbl.getId();
     }
 

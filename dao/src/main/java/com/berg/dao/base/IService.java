@@ -38,6 +38,8 @@ public interface IService<T>  extends com.baomidou.mybatisplus.extension.service
     boolean updateBatchById(Collection<T> entityList, int batchSize);
     //endregion
 
+    boolean saveOrUpdateById(T entity);
+
     default boolean saveOrUpdateBatchById(Collection<T> entityList){
         return  saveOrUpdateBatchById(entityList, DEFAULT_BATCH_SIZE);
     }

@@ -28,7 +28,8 @@
     </sql>
 
     <select id="listUserPerms" resultType="java.lang.String">
-        SELECT DISTINCT m.perms
+        SELECT DISTINCT perms FROM(
+        SELECT m.perms
         FROM sys_role_tbl r
             LEFT JOIN sys_user_role_tbl ur ON ur.role_id =r.id
             LEFT JOIN sys_user_tbl u ON u.id = ur.user_id
@@ -36,5 +37,12 @@
             LEFT JOIN sys_component_tbl m ON m.id = rm.com_id
         WHERE COALESCE(m.perms,'')!='' AND ur.isdel=0 AND rm.isdel=0 AND m.isdel=0
             AND u.username = #{userName}
+		UNION ALL
+		SELECT m.perms
+		FROM sys_user_tbl u
+			LEFT JOIN sys_user_component_tbl uc ON uc.user_id = u.id
+			LEFT JOIN sys_component_tbl m ON m.id = uc.com_id
+        WHERE COALESCE(m.perms,'')!='' AND uc.isdel=0 AND m.isdel=0
+			AND u.username = #{userName}) a
     </select>
 </mapper>

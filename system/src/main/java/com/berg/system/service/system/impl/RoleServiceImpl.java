@@ -127,7 +127,7 @@ public class RoleServiceImpl implements RoleService {
             roleTbl.setCreateUser(operator);
             roleTbl.setIsdel(0);
         }
-        roleTblDao.saveOrUpdate(roleTbl);
+        roleTblDao.saveOrUpdateById(roleTbl);
         return roleTbl.getId();
     }
 

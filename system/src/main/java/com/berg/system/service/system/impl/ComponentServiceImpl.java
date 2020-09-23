@@ -156,7 +156,7 @@ public class ComponentServiceImpl implements ComponentService {
             componentTbl.setCreateUser(operator);
             componentTbl.setIsdel(0);
         }
-        componentTblDao.saveOrUpdate(componentTbl);
+        componentTblDao.saveOrUpdateById(componentTbl);
         return componentTbl.getId();
     }
 
