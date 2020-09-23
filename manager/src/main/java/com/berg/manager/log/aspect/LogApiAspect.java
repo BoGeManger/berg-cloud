@@ -112,7 +112,7 @@ public class LogApiAspect {
             try{
                 input = JsonHelper.toJson(paramMap,null);
             }catch (Exception ex){
-//                log.error("ApiLogAspect数据转换失败："+ex.getMessage());
+                log.error("ApiLogAspect数据转换失败："+ex.getMessage());
                 return input;
             }
         }
@@ -130,7 +130,7 @@ public class LogApiAspect {
             try{
                 ouput = JsonHelper.toJson(result,null);
             }catch (Exception ex){
-//                log.error("ApiLogAspect数据转换失败："+ex.getMessage());
+                log.error("ApiLogAspect数据转换失败："+ex.getMessage());
                 return ouput;
             }
         }
