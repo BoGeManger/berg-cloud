@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.berg.dao.log.mapper.SystemLogTblMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.berg.dao.log.entity.SystemLogTbl">
+        <id column="id" property="id" />
+        <result column="service" property="service" />
+        <result column="port" property="port" />
+        <result column="message" property="message" />
+        <result column="content" property="content" />
+        <result column="operate_time" property="operateTime" />
+        <result column="operate_user" property="operateUser" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, service, port, message, content, operate_time, operate_user, type
+    </sql>
+
+</mapper>

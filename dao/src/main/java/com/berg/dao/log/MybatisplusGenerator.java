@@ -69,7 +69,7 @@ public class MybatisplusGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(scanner("模块名"));
+//        pc.setModuleName(scanner("模块名"));
 //        pc.setModuleName("sys");
         pc.setParent("com.berg.dao.log");
         mpg.setPackageInfo(pc);
@@ -127,8 +127,8 @@ public class MybatisplusGenerator {
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
 //        strategy.setInclude("sys_component_tbl","sys_organization_tbl","sys_role_component_tbl","sys_role_tbl","sys_user_role_tbl","sys_user_tbl");
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
-//        strategy.setTablePrefix("");//不启用名称模块过滤
+//        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setTablePrefix("");//不启用名称模块过滤
         mpg.setStrategy(strategy);
         // 选择 freemarker 引擎需要指定如下加，注意 pom 依赖必须有！
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());

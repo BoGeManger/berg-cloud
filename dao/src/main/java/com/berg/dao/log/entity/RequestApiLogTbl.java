@@ -1,4 +1,4 @@
-package com.berg.dao.log.log.entity;
+package com.berg.dao.log.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -15,13 +15,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 
- * @since 2020-09-22
+ * @since 2020-09-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("log_request_api_tbl")
-public class RequestApiTbl implements Serializable {
+@TableName("request_api_log_tbl")
+public class RequestApiLogTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,12 +32,12 @@ public class RequestApiTbl implements Serializable {
     private Integer id;
 
     /**
-     * 服务
+     * 调用服务
      */
     private String service;
 
     /**
-     * 端口
+     * 调用端口
      */
     private Integer port;
 

@@ -3,8 +3,8 @@ package com.berg.manager.log.aspect;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.berg.exception.GlobalExceptionHandler;
-import com.berg.manager.log.aspect.annotation.LogApi;
-import com.berg.manager.log.service.impl.LogRequestApiTask;
+import com.berg.manager.log.aspect.annotation.ApiLog;
+import com.berg.manager.log.service.impl.RequestApiLogTask;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
 import com.berg.utils.JsonHelper;
@@ -27,12 +27,12 @@ import java.util.Map;
 @Slf4j
 @Aspect
 @Component
-public class LogApiAspect {
+public class ApiLogAspect {
 
     @Autowired
-    LogRequestApiTask logRequestApiTask;
+    RequestApiLogTask logRequestApiTask;
 
-    @Pointcut("@annotation(com.berg.manager.log.aspect.annotation.LogApi)")
+    @Pointcut("@annotation(com.berg.manager.log.aspect.annotation.ApiLog)")
     public void poincut(){
 
     }
@@ -85,7 +85,7 @@ public class LogApiAspect {
      */
     String getValue(Method method){
         String value = "";
-        LogApi apiLog = method.getAnnotation(LogApi.class);
+        ApiLog apiLog = method.getAnnotation(ApiLog.class);
         if(apiLog != null){
             value=apiLog.value();
         }

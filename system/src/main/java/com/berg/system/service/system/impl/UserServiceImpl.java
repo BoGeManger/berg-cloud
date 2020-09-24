@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.berg.dao.system.sys.entity.UserComponentTbl;
 import com.berg.dao.system.sys.service.UserComponentTblDao;
-import com.github.pagehelper.PageHelper;
 import com.berg.dao.system.sys.entity.UserRoleTbl;
 import com.berg.dao.system.sys.entity.UserTbl;
 import com.berg.dao.system.sys.service.UserRoleTblDao;
