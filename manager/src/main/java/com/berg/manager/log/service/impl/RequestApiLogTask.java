@@ -5,6 +5,7 @@ import com.berg.constant.AppConstants;
 import com.berg.dao.log.entity.RequestApiLogTbl;
 import com.berg.dao.log.service.RequestApiLogTblDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,7 @@ public class RequestApiLogTask {
      * @param description
      * @param operate
      */
+    @Async
     public void addLog(String controller,String method,String code,String input,String output,String description,String operate){
         RequestApiLogTbl requestApiLogTbl = new RequestApiLogTbl();
         requestApiLogTbl.setService(appConstants.getAppName());
