@@ -2,6 +2,7 @@ package com.berg.constant;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,4 +18,7 @@ public  class AppConstants {
     String workerId;
     @Value("${snowflake.id.worker.datacenterId:0}")
     String datacenterId;
+
+    @Value("${files.temp.path:/files/}")
+    String filesTempPath;
 }
