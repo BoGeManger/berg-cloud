@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class UserEditVo {
 
+    @NotNull(message = "用户id不能为空")
     @Min(value = 0,message = "用户id不能小于0")
     @ApiModelProperty(value = "用户id")
     Integer id;

@@ -3,7 +3,7 @@ package com.berg.manager.log.aspect;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.berg.exception.GlobalExceptionHandler;
-import com.berg.manager.log.aspect.annotation.ApiLog;
+import com.berg.manager.log.aspect.ApiLog;
 import com.berg.manager.log.service.impl.RequestApiLogTask;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
@@ -32,7 +32,7 @@ public class ApiLogAspect {
     @Autowired
     RequestApiLogTask logRequestApiTask;
 
-    @Pointcut("@annotation(com.berg.manager.log.aspect.annotation.ApiLog)")
+    @Pointcut("@annotation(com.berg.manager.log.aspect.ApiLog)")
     public void poincut(){
 
     }

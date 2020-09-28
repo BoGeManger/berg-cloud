@@ -1,4 +1,4 @@
-package com.berg.manager.log.aspect.annotation;
+package com.berg.manager.log.aspect;
 
 import java.lang.annotation.*;
 
