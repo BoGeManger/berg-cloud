@@ -12,6 +12,8 @@ public class MinioConfig {
 
     @Value(value = "${minio.url}")
     String url;
+    @Value(value = "${minio.serviceUrl}")
+    String serviceUrl;
     @Value(value = "${minio.name}")
     String name;
     @Value(value = "${minio.password}")

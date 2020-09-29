@@ -133,6 +133,7 @@ mybatis-plus:
 
 minio:
   url: 172.16.10.19:9000
+  serviceUrl: 172.16.10.19/files/
   name: admin
   password: 12345678
   bucketName: master
