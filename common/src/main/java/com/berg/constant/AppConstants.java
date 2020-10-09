@@ -18,7 +18,4 @@ public  class AppConstants {
     String workerId;
     @Value("${snowflake.id.worker.datacenterId:0}")
     String datacenterId;
-
-    @Value("${files.temp.path:/files/}")
-    String filesTempPath;
 }

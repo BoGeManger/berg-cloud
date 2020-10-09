@@ -152,10 +152,6 @@ xxl:
       ip: 172.16.10.23
       port: 9999
 
-files:
-  temp:
-    path: F://
-
 snowflake:
   id:
     worker:
