@@ -330,7 +330,7 @@ public class MinioUtil {
      * @throws Exception
      */
     public static String getUrl(String bucketName, String objectName) throws Exception{
-        return  getServiceUrl() + minioClient.getObjectUrl(bucketName,objectName);
+        return  getServiceUrl() + minioClient.getObjectUrl(bucketName,objectName).replaceAll(getMinioUrl(),"");
     }
 
     /**
