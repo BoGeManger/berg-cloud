@@ -25,10 +25,6 @@ import java.util.*;
 
 public class ExcelUtil {
 
-    static String getFilesTempPath(){
-        return SpringUtil.getBean(AppConstants.class).getFilesTempPath();
-    }
-
     /**
      * 标题样式
      */
@@ -67,7 +63,7 @@ public class ExcelUtil {
             byte[] bytes = file.getBytes();
             String fileName = file.getOriginalFilename();
             String name = fileName.substring(fileName.lastIndexOf("."));
-            path = Paths.get(getFilesTempPath() + sdf.format(new Date()) + name);
+            path = Paths.get(sdf.format(new Date()) + name);
             Files.write(path, bytes);
             File f = new File(path.toString());
             is = new FileInputStream(f);
@@ -141,7 +137,7 @@ public class ExcelUtil {
             byte[] bytes = file.getBytes();
             String fileName = file.getOriginalFilename();
             String name = fileName.substring(fileName.lastIndexOf("."));
-            path = Paths.get(getFilesTempPath() + sdf.format(new Date()) + name);
+            path = Paths.get(sdf.format(new Date()) + name);
             Files.write(path, bytes);
             File f = new File(path.toString());
             is = new FileInputStream(f);
@@ -206,7 +202,7 @@ public class ExcelUtil {
             String fileName =  sdf.format(new Date())+"."+fileExtension;
             String name = fileName.substring(fileName.lastIndexOf("."));
             //Path path = Paths.get("src/main/resources/templates/" + sdf.format(new Date()) + name);
-            path = Paths.get(getFilesTempPath() + sdf.format(new Date()) + name);
+            path = Paths.get(sdf.format(new Date()) + name);
             Files.write(path, bytes);
             File f = new File(path.toString());
             is = new FileInputStream(f);
@@ -296,19 +292,6 @@ public class ExcelUtil {
             }
         }
         return columnValue;
-    }
-
-    /**
-     * 在硬盘上写入excel文件
-     *
-     * @param version
-     * @param excelSheets
-     * @throws IOException
-     */
-    public static void createWorkbookAtDisk(ExcelVersion version, List<ExcelSheetPO> excelSheets)
-            throws IOException {
-        FileOutputStream fileOut = new FileOutputStream(getFilesTempPath());
-        createWorkbookAtOutStream(version, excelSheets, fileOut, true);
     }
 
     /**
