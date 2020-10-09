@@ -159,7 +159,7 @@ snowflake:
       datacenterId: 0
 
 swagger:
-  enabled: false
+  enabled: true
 
 logging:
   file: ./log/sys-err.log

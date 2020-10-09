@@ -58,7 +58,7 @@ management:
       show-details: always
 
 swagger:
-  enabled: false
+  enabled: true
 
 logging:
   file: ./log/sys-err.log

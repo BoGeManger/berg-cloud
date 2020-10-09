@@ -1,6 +1,7 @@
 package com.berg.api.config;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
+@ConditionalOnProperty(prefix = "swagger", name ="enabled" ,havingValue = "true",matchIfMissing = true)
 public class SwaggerConfig {
 
     public static final String VERSION = "1.0.0";
