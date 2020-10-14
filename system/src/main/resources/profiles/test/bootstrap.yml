@@ -30,8 +30,6 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  quartz:
-    job-store-type: jdbc
   datasource:
     druid:
       web-stat-filter:
@@ -164,7 +162,7 @@ swagger:
   enabled: true
 
 logging:
-  file: ./log/sys-err.log
+  file: ./log/logs/sys.log
   #配置日志级别
 #  level:
 #    root: debug

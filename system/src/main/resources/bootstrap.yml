@@ -162,7 +162,7 @@ swagger:
   enabled: true
 
 logging:
-  file: ./log/sys-err.log
+  file: ./log/logs/sys.log
   #配置日志级别
 #  level:
 #    root: debug
