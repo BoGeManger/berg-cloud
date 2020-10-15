@@ -60,8 +60,11 @@ public class ApiLogAspect {
         LOCAL_MAP.set(map);
         Object result =  point.proceed();
         String output = getOutput(result);
-        logRequestApiTask.addLog(now,controller,name, MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
-        LOCAL_MAP.remove();
+        try{
+            logRequestApiTask.addLog(now,controller,name, MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
+        }finally {
+            LOCAL_MAP.remove();
+        }
         return result;
     }
 
@@ -70,8 +73,11 @@ public class ApiLogAspect {
         Map<String,String> map = LOCAL_MAP.get();
         Result result = new GlobalExceptionHandler().getResult(throwable,false);
         String output = getOutput(result);
-        logRequestApiTask.addLog(LocalDateTimeUtil.parse(map.get("now"),"yyyy-MM-dd HH:mm:ss,SSS"),map.get("controller"),map.get("name"),result.getCode(),map.get("input"),output,map.get("value"),map.get("operater"));
-        LOCAL_MAP.remove();
+        try{
+            logRequestApiTask.addLog(LocalDateTimeUtil.parse(map.get("now"),"yyyy-MM-dd HH:mm:ss,SSS"),map.get("controller"),map.get("name"),result.getCode(),map.get("input"),output,map.get("value"),map.get("operater"));
+        }finally {
+            LOCAL_MAP.remove();
+        }
     }
 
     /**
