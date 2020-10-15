@@ -3,6 +3,8 @@ package com.berg.dao.log.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -77,9 +79,19 @@ public class RequestApiLogTbl implements Serializable {
     private String operateUser;
 
     /**
-     * 操作时间
+     * 请求时间
      */
-    private LocalDateTime operateTime;
+    private LocalDateTime requestTime;
+
+    /**
+     * 响应时间
+     */
+    private LocalDateTime responseTime;
+
+    /**
+     * 耗时(秒)
+     */
+    private BigDecimal timeout;
 
 
 }

@@ -1,6 +1,8 @@
 package com.berg.manager.log.service.impl;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.berg.constant.AppConstants;
 import com.berg.dao.log.entity.RequestApiLogTbl;
 import com.berg.dao.log.service.RequestApiLogTblDao;
@@ -26,7 +28,7 @@ public class RequestApiLogTask {
      * @param operate
      */
     @Async
-    public void addLog(String controller,String method,String code,String input,String output,String description,String operate){
+    public void addLog(LocalDateTime requestTime,String controller,String method,String code,String input,String output,String description,String operate){
         RequestApiLogTbl requestApiLogTbl = new RequestApiLogTbl();
         requestApiLogTbl.setService(appConstants.getAppName());
         requestApiLogTbl.setPort(appConstants.getPort());
@@ -37,7 +39,10 @@ public class RequestApiLogTask {
         requestApiLogTbl.setOutput(output);
         requestApiLogTbl.setDescription(description);
         requestApiLogTbl.setOperateUser(operate);
-        requestApiLogTbl.setOperateTime(LocalDateTime.now());
+        requestApiLogTbl.setRequestTime(requestTime);
+        requestApiLogTbl.setResponseTime(LocalDateTime.now());
+        float timeout = (float)LocalDateTimeUtil.between(requestTime,LocalDateTime.now()).toMillis()/1000;
+        requestApiLogTbl.setTimeout(new BigDecimal(timeout).setScale(2, BigDecimal.ROUND_HALF_UP));
         requestApiLogTblDao.save(requestApiLogTbl);
     }
 }

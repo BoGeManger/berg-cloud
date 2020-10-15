@@ -14,12 +14,14 @@
         <result column="output" property="output" />
         <result column="description" property="description" />
         <result column="operate_user" property="operateUser" />
-        <result column="operate_time" property="operateTime" />
+        <result column="request_time" property="requestTime" />
+        <result column="response_time" property="responseTime" />
+        <result column="timeout" property="timeout" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, service, port, controller, method, code, input, output, description, operate_user, operate_time
+        id, service, port, controller, method, code, input, output, description, operate_user, request_time,response_time,timeout
     </sql>
 
 </mapper>

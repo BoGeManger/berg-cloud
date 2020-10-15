@@ -1,9 +1,9 @@
 package com.berg.manager.log.aspect;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.berg.exception.GlobalExceptionHandler;
-import com.berg.manager.log.aspect.ApiLog;
 import com.berg.manager.log.service.impl.RequestApiLogTask;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequ
 
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ import java.util.Map;
 @Aspect
 @Component
 public class ApiLogAspect {
+
+    protected static final ThreadLocal<Map<String,String>> LOCAL_MAP = new ThreadLocal<>();
 
     @Autowired
     RequestApiLogTask logRequestApiTask;
@@ -39,29 +42,36 @@ public class ApiLogAspect {
 
     @Around("poincut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        Object result =  point.proceed();
+        LocalDateTime now = LocalDateTime.now();
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
         String controller = method.getDeclaringClass().getName();
+        String name = method.getName();
         String input = getInput(point,signature);
         String value = getValue(method);
         String operater = getUsername();
+        Map<String,String> map = new HashMap<>();
+        map.put("now", LocalDateTimeUtil.format(now,"yyyy-MM-dd HH:mm:ss,SSS"));
+        map.put("controller",controller);
+        map.put("name",name);
+        map.put("input",input);
+        map.put("value",value);
+        map.put("operater",operater);
+        LOCAL_MAP.set(map);
+        Object result =  point.proceed();
         String output = getOutput(result);
-        logRequestApiTask.addLog(controller,method.getName(), MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
+        logRequestApiTask.addLog(now,controller,name, MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
+        LOCAL_MAP.remove();
         return result;
     }
 
     @AfterThrowing(value = "poincut()",throwing = "throwable")
     public void afterThrowing(JoinPoint point, Throwable throwable){
-        MethodSignature signature = (MethodSignature) point.getSignature();
-        Method method = signature.getMethod();
-        String controller =  method.getDeclaringClass().getName();
-        String input = getInput(point,signature);
-        String value = getValue(method);
-        String operater = getUsername();
+        Map<String,String> map = LOCAL_MAP.get();
         Result result = new GlobalExceptionHandler().getResult(throwable,false);
         String output = getOutput(result);
-        logRequestApiTask.addLog(controller,method.getName(),result.getCode(),input,output,value,operater);
+        logRequestApiTask.addLog(LocalDateTimeUtil.parse(map.get("now"),"yyyy-MM-dd HH:mm:ss,SSS"),map.get("controller"),map.get("name"),result.getCode(),map.get("input"),output,map.get("value"),map.get("operater"));
+        LOCAL_MAP.remove();
     }
 
     /**
