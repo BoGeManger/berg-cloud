@@ -44,6 +44,8 @@ spring:
      reset-enable: false
      url-pattern: /druid/*
    dynamic:
+      seata: true    #开启seata代理，开启后默认每个数据源都代理，如果某个不需要代理可单独关闭
+      seata-mode: AT #支持XA及AT模式,默认AT
       primary: system #设置默认的数据源或者数据源组,默认值即为master
       strict: false #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候回抛出异常,不启动会使用默认数据源
       datasource:
@@ -113,15 +115,6 @@ spring:
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    health:
-      show-details: always
-
 mybatis-plus:
   mapper-locations: classpath:/system/mapper/**/*.xml,classpath:/log/mapper/*.xml
   global-config:
@@ -151,6 +144,33 @@ xxl:
       appname: system
       ip: 172.16.10.23
       port: 9999
+
+seata:
+  enabled: true
+  application-id: applicationName
+  tx-service-group: my_test_tx_group
+  #一定要是false
+  enable-auto-data-source-proxy: false
+  service:
+    vgroup-mapping:
+      #key与上面的tx-service-group的值对应
+      my_test_tx_group: default
+    grouplist:
+      #seata-server地址仅file注册中心需要
+      default: 172.16.10.19:8091
+  config:
+    type: file
+  registry:
+    type: file
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
 
 snowflake:
   id:
