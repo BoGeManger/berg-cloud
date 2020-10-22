@@ -1,8 +1,8 @@
 package com.berg.dao.log.service.impl;
 
-import com.berg.dao.log.entity.SystemLogTbl;
-import com.berg.dao.log.mapper.SystemLogTblMapper;
-import com.berg.dao.log.service.SystemLogTblDao;
+import com.berg.dao.log.entity.OperateLogTbl;
+import com.berg.dao.log.mapper.OperateLogTblMapper;
+import com.berg.dao.log.service.OperateLogTblDao;
 import com.berg.dao.base.ServiceImpl;
 import org.springframework.stereotype.Repository;
 import com.baomidou.dynamic.datasource.annotation.DS;
@@ -18,10 +18,10 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  */
 @DS("log")
 @Repository("log.SystemLogTblDaoImpl")
-public class SystemLogTblDaoImpl extends ServiceImpl<SystemLogTblMapper, SystemLogTbl> implements SystemLogTblDao {
+public class OperateLogTblDaoImpl extends ServiceImpl<OperateLogTblMapper, OperateLogTbl> implements OperateLogTblDao {
 
     @Override
-    public SystemLogTblMapper getMapper(){
+    public OperateLogTblMapper getMapper(){
       DynamicDataSourceContextHolder.push("log");
       return this.getBaseMapper();
     }

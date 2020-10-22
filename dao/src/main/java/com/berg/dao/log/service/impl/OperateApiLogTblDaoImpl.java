@@ -1,8 +1,8 @@
 package com.berg.dao.log.service.impl;
 
-import com.berg.dao.log.entity.RequestApiLogTbl;
-import com.berg.dao.log.mapper.RequestApiLogTblMapper;
-import com.berg.dao.log.service.RequestApiLogTblDao;
+import com.berg.dao.log.entity.OperateApiLogTbl;
+import com.berg.dao.log.mapper.OperateApiLogTblMapper;
+import com.berg.dao.log.service.OperateApiLogTblDao;
 import com.berg.dao.base.ServiceImpl;
 import org.springframework.stereotype.Repository;
 import com.baomidou.dynamic.datasource.annotation.DS;
@@ -18,10 +18,10 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  */
 @DS("log")
 @Repository("log.RequestApiLogTblDaoImpl")
-public class RequestApiLogTblDaoImpl extends ServiceImpl<RequestApiLogTblMapper, RequestApiLogTbl> implements RequestApiLogTblDao {
+public class OperateApiLogTblDaoImpl extends ServiceImpl<OperateApiLogTblMapper, OperateApiLogTbl> implements OperateApiLogTblDao {
 
     @Override
-    public RequestApiLogTblMapper getMapper(){
+    public OperateApiLogTblMapper getMapper(){
       DynamicDataSourceContextHolder.push("log");
       return this.getBaseMapper();
     }

@@ -1,6 +1,6 @@
 package com.berg.dao.log.mapper;
 
-import com.berg.dao.log.entity.RequestApiLogTbl;
+import com.berg.dao.log.entity.OperateApiLogTbl;
 import com.berg.dao.base.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.berg.dao.base.BaseMapper;
  * @author 
  * @since 2020-09-23
  */
-public interface RequestApiLogTblMapper extends BaseMapper<RequestApiLogTbl> {
+public interface OperateApiLogTblMapper extends BaseMapper<OperateApiLogTbl> {
 
 }

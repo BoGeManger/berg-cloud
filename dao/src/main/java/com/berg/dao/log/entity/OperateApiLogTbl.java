@@ -22,8 +22,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("request_api_log_tbl")
-public class RequestApiLogTbl implements Serializable {
+@TableName("operate_api_log_tbl")
+public class OperateApiLogTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +52,11 @@ public class RequestApiLogTbl implements Serializable {
      * 请求方法
      */
     private String method;
+
+    /**
+     * 请求头部
+     */
+    private String headers;
 
     /**
      * 返回编码(00：请求成功,99：系统异常，10：参数异常，11：未授权，66：业务友好提示)

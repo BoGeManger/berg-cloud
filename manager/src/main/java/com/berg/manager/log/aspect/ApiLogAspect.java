@@ -4,7 +4,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.berg.exception.GlobalExceptionHandler;
-import com.berg.manager.log.service.impl.RequestApiLogTask;
+import com.berg.manager.log.service.impl.OperateApiLogTask;
 import com.berg.message.MessageConstant;
 import com.berg.message.Result;
 import com.berg.utils.JsonHelper;
@@ -17,11 +17,15 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +37,7 @@ public class ApiLogAspect {
     protected static final ThreadLocal<Map<String,String>> LOCAL_MAP = new ThreadLocal<>();
 
     @Autowired
-    RequestApiLogTask logRequestApiTask;
+    OperateApiLogTask operateApiLogTask;
 
     @Pointcut("@annotation(com.berg.manager.log.aspect.ApiLog)")
     public void poincut(){
@@ -47,6 +51,7 @@ public class ApiLogAspect {
         Method method = signature.getMethod();
         String controller = method.getDeclaringClass().getName();
         String name = method.getName();
+        String headers = getHeaders();
         String input = getInput(point,signature);
         String value = getValue(method);
         String operater = getUsername();
@@ -54,6 +59,7 @@ public class ApiLogAspect {
         map.put("now", LocalDateTimeUtil.format(now,"yyyy-MM-dd HH:mm:ss,SSS"));
         map.put("controller",controller);
         map.put("name",name);
+        map.put("headers",headers);
         map.put("input",input);
         map.put("value",value);
         map.put("operater",operater);
@@ -61,7 +67,7 @@ public class ApiLogAspect {
         Object result =  point.proceed();
         String output = getOutput(result);
         try{
-            logRequestApiTask.addLog(now,controller,name, MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
+            operateApiLogTask.addLog(now,controller,name,headers, MessageConstant.SYSTEM_SUCESS_CODE,input,output,value,operater);
         }finally {
             LOCAL_MAP.remove();
         }
@@ -74,7 +80,7 @@ public class ApiLogAspect {
         Result result = new GlobalExceptionHandler().getResult(throwable,false);
         String output = getOutput(result);
         try{
-            logRequestApiTask.addLog(LocalDateTimeUtil.parse(map.get("now"),"yyyy-MM-dd HH:mm:ss,SSS"),map.get("controller"),map.get("name"),result.getCode(),map.get("input"),output,map.get("value"),map.get("operater"));
+            operateApiLogTask.addLog(LocalDateTimeUtil.parse(map.get("now"),"yyyy-MM-dd HH:mm:ss,SSS"),map.get("controller"),map.get("name"),map.get("headers"),result.getCode(),map.get("input"),output,map.get("value"),map.get("operater"));
         }finally {
             LOCAL_MAP.remove();
         }
@@ -153,4 +159,25 @@ public class ApiLogAspect {
         return ouput;
     }
 
+    /**
+     * 获取请求头部
+     * @return
+     */
+    String getHeaders(){
+        String headers = "";
+        Map<String,String> map = new HashMap<>();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()){
+            String key = headerNames.nextElement();
+            map.put(key,request.getHeader(key));
+        }
+        try{
+            headers = JsonHelper.toJson(map,null);
+        }catch (Exception ex){
+            log.error("ApiLogAspect数据转换失败："+ex.getMessage());
+        }
+        return headers;
+    }
 }

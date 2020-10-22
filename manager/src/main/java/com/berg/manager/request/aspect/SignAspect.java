@@ -4,6 +4,7 @@ import com.berg.constant.AppConstants;
 import com.berg.exception.UnauthException;
 import com.berg.manager.request.aspect.Sign;
 import com.berg.manager.request.service.SignService;
+import com.berg.utils.JsonHelper;
 import com.berg.utils.SignConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -20,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 @Aspect
 @Component

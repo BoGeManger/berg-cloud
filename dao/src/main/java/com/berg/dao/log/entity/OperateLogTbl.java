@@ -20,8 +20,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("system_log_tbl")
-public class SystemLogTbl implements Serializable {
+@TableName("operate_log_tbl")
+public class OperateLogTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,9 +47,19 @@ public class SystemLogTbl implements Serializable {
     private String message;
 
     /**
-     * 详细日志信息
+     * 扩展字段1
      */
-    private String content;
+    private String extField1;
+
+    /**
+     * 扩展字段2
+     */
+    private String extField2;
+
+    /**
+     * 扩展字段3
+     */
+    private String extField3;
 
     /**
      * 操作时间
