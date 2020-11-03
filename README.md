@@ -27,6 +27,7 @@
 
 * 生产环境IDEA链接Docker开放端口2375请配置好ca证书
 * localhost可替换为服务器IP地址
+* docker run添加--cap-add=SYS_PTRACE参数解决无法使用JVM命令问题
 
 ### 预设初始账号密码
 * redis 

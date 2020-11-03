@@ -59,10 +59,16 @@ public class MybatisplusGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://localhost:3306/basedb?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8");
-        // dsc.setSchemaName("public");postgresql使用
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123456");
+
+//postgresql
+//        dsc.setUrl("jdbc:postgresql://localhost:5432/basedb?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull");
+//        dsc.setSchemaName("public");
+//        dsc.setDriverName("org.postgresql.Driver");
+//        dsc.setUsername("postgres");
+//        dsc.setPassword("123456");
 
         mpg.setDataSource(dsc);
 
