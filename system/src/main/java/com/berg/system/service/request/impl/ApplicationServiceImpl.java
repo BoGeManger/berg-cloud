@@ -12,7 +12,7 @@ import com.berg.dao.system.res.entity.ApplicationTbl;
 import com.berg.dao.system.res.service.ApplicationApiTblDao;
 import com.berg.dao.system.res.service.ApplicationTblDao;
 import com.berg.exception.UserFriendException;
-import com.berg.system.authentication.JWTUtil;
+import com.berg.system.auth.JWTUtil;
 import com.berg.system.service.request.ApplicationService;
 import com.berg.utils.SnowflakeIdWorker;
 import com.berg.vo.request.ApplicationEditVo;

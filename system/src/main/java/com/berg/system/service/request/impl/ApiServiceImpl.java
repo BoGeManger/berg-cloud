@@ -6,7 +6,7 @@ import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.res.entity.ApiTbl;
 import com.berg.dao.system.res.service.ApiTblDao;
 import com.berg.exception.UserFriendException;
-import com.berg.system.authentication.JWTUtil;
+import com.berg.system.auth.JWTUtil;
 import com.berg.system.service.request.ApiService;
 import com.berg.vo.request.ApiEditVo;
 import com.berg.vo.request.ApiVo;
