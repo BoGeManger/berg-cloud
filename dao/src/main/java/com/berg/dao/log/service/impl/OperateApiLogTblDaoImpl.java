@@ -1,5 +1,6 @@
 package com.berg.dao.log.service.impl;
 
+import com.berg.dao.constant.DataSource;
 import com.berg.dao.log.entity.OperateApiLogTbl;
 import com.berg.dao.log.mapper.OperateApiLogTblMapper;
 import com.berg.dao.log.service.OperateApiLogTblDao;
@@ -16,13 +17,13 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  * @author 
  * @since 2020-09-23
  */
-@DS("log")
+@DS(DataSource.LOG)
 @Repository("log.RequestApiLogTblDaoImpl")
 public class OperateApiLogTblDaoImpl extends ServiceImpl<OperateApiLogTblMapper, OperateApiLogTbl> implements OperateApiLogTblDao {
 
     @Override
     public OperateApiLogTblMapper getMapper(){
-      DynamicDataSourceContextHolder.push("log");
+      DynamicDataSourceContextHolder.push(DataSource.LOG);
       return this.getBaseMapper();
     }
 }

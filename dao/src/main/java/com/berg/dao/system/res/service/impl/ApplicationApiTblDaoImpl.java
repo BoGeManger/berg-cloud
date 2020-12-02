@@ -1,5 +1,6 @@
 package com.berg.dao.system.res.service.impl;
 
+import com.berg.dao.constant.DataSource;
 import com.berg.dao.system.res.entity.ApplicationApiTbl;
 import com.berg.dao.system.res.mapper.ApplicationApiTblMapper;
 import com.berg.dao.system.res.service.ApplicationApiTblDao;
@@ -16,13 +17,13 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  * @author 
  * @since 2020-09-28
  */
-@DS("system")
+@DS(DataSource.SYSTEM)
 @Repository("system.ApplicationApiTblDaoImpl")
 public class ApplicationApiTblDaoImpl extends ServiceImpl<ApplicationApiTblMapper, ApplicationApiTbl> implements ApplicationApiTblDao {
 
     @Override
     public ApplicationApiTblMapper getMapper(){
-      DynamicDataSourceContextHolder.push("system");
+      DynamicDataSourceContextHolder.push(DataSource.SYSTEM);
       return this.getBaseMapper();
     }
 }

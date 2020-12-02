@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.berg.constant.RedisKeyConstants;
+import com.berg.dao.base.DSTransactional;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.res.entity.ApplicationApiTbl;
 import com.berg.dao.system.res.entity.ApplicationTbl;
@@ -89,8 +90,7 @@ public class ApplicationServiceImpl implements ApplicationService {
      * @param input
      * @return
      */
-    @DS("system")
-    @Transactional
+    @DSTransactional
     @Override
     public Integer addApplication(ApplicationEditVo input){
         checkName(input);
@@ -107,8 +107,7 @@ public class ApplicationServiceImpl implements ApplicationService {
      * @param input
      * @return
      */
-    @DS("system")
-    @Transactional
+    @DSTransactional
     @Override
     public Integer updateApplication(ApplicationEditVo input){
         checkName(input);
