@@ -17,8 +17,8 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
  * @author ${author}
  * @since ${date}
  */
-@DS(DataSource.LOG)
-@Repository("log.${table.serviceImplName}")
+@DS(${cfg.ds})
+@Repository("${cfg.parentModuleName}.${table.serviceImplName}")
 <#if kotlin>
 open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
 
@@ -28,7 +28,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
     @Override
     public ${table.mapperName} getMapper(){
-      DynamicDataSourceContextHolder.push(DataSource.LOG);
+      DynamicDataSourceContextHolder.push(${cfg.ds});
       return this.getBaseMapper();
     }
 }
