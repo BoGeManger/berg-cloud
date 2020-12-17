@@ -1,8 +1,8 @@
 package com.berg.system.controller;
 
-import com.berg.base.BaseController;
+import com.berg.common.base.BaseController;
+import com.berg.common.constant.Result;
 import com.berg.dao.page.PageInfo;
-import com.berg.message.Result;
 import com.berg.system.service.request.ApiService;
 import com.berg.vo.common.EntityIdVo;
 import com.berg.vo.request.ApiEditVo;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Api(tags = "请求接口管理")
-public class ApiController extends BaseController{
+public class ApiController extends BaseController {
 
     @Autowired
     ApiService apiService;

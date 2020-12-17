@@ -2,12 +2,12 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.berg.auth.system.auth.AuthenticationUtil;
 import com.berg.dao.system.sys.entity.ComponentTbl;
 import com.berg.dao.system.sys.entity.RoleComponentTbl;
 import com.berg.dao.system.sys.service.ComponentTblDao;
 import com.berg.dao.system.sys.service.RoleComponentTblDao;
 import com.berg.system.service.system.ComponentService;
-import com.berg.system.auth.JWTUtil;
 import com.berg.vo.common.ListVo;
 import com.berg.vo.system.ComponentEditVo;
 import com.berg.vo.system.ComponentTreeVo;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ComponentServiceImpl implements ComponentService {
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
     @Autowired
     ComponentTblDao componentTblDao;
     @Autowired
@@ -100,7 +100,7 @@ public class ComponentServiceImpl implements ComponentService {
      */
     @Override
     public void operatorBatchCom(OperatorBatchComInVo input) {
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         //新增或修改组件
         input.getComs().forEach(item -> {
             Integer id = addOrUpdateCom(item, operator);
@@ -169,7 +169,7 @@ public class ComponentServiceImpl implements ComponentService {
         LocalDateTime now = LocalDateTime.now();
         ComponentTbl componentTbl = componentTblDao.getById(id);
         if (componentTbl != null) {
-            String operator = jWTUtil.getUsername();
+            String operator = authenticationUtil.getUsername();
             componentTbl.setIsdel(1);
             componentTbl.setDelTime(now);
             componentTbl.setDelUser(operator);

@@ -2,12 +2,13 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.berg.auth.system.auth.AuthenticationUtil;
+import com.berg.common.MinioUtil;
+import com.berg.common.constant.Bucket;
+import com.berg.common.exception.FailException;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.sys.entity.FileTbl;
 import com.berg.dao.system.sys.service.FileTblDao;
-import com.berg.exception.FailException;
-import com.berg.file.MinioUtil;
-import com.berg.system.auth.JWTUtil;
 import com.berg.system.service.system.FileService;
 import com.berg.vo.system.FilePathVo;
 import com.berg.vo.system.FileVo;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 public class FileServiceImpl  implements FileService {
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
     @Autowired
     FileAsyncTask fileAsyncTask;
 
@@ -64,11 +65,11 @@ public class FileServiceImpl  implements FileService {
      */
     @Override
     public FilePathVo uploadFile(MultipartFile file, String name, String code, Integer type){
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         FilePathVo result = new FilePathVo();
         String url ="";
         try{
-            url = MinioUtil.putByName(name,file);
+            url = MinioUtil.put(Bucket.MASTER,name,file);
         }catch (Exception ex){
             throw new FailException("上传文件失败："+ex.getMessage());
         }
@@ -87,12 +88,12 @@ public class FileServiceImpl  implements FileService {
     @Override
     public void delFileByName(String name){
         try{
-            MinioUtil.removeByName(name);
+            MinioUtil.remove(Bucket.MASTER,name);
         }catch (Exception ex){
             throw new FailException("删除文件失败："+ex.getMessage());
         }
         LocalDateTime now = LocalDateTime.now();
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         FileTbl fileTbl = new FileTbl();
         fileTbl.setIsdel(1);
         fileTbl.setDelUser(operator);

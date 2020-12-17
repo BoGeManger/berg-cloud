@@ -3,14 +3,13 @@
 ### 架构分层简介
 |名称|定义|端口|workerId|
 |:----: |:----:|:----:|:----:|
-|common|公共类|||
+|common|公共|||
 |model|实体|||
 |dao|后台服务数据交互|||
 |manager|公共服务应用|||
 |admin|监控服务|30000||
-|gateway|网关|40000||
-|api|负载均衡|41000||
-|system|后台服务|42000|0|
+|gateway|网关|40000|0|
+|system|后台服务|41000|1|
 
 * 使用分布式id生成需配置workerId和datacenterId，需保证每个服务workerId和datacenterId组合均不一致，docker容器初始化时workerId为默认设置，datacenterId则根据端口号生成，如40001的datacenterId即为1，以此规则命名
 
@@ -62,3 +61,28 @@
  * JDBC组件：Druid 
  * 公共工具：Hutool 
  * 验证框架：Hibernate Validator
+ 
+ ### api使用
+ ```
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 700000
+            
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 300000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 0
+  eureka:
+     enabled: false
+```

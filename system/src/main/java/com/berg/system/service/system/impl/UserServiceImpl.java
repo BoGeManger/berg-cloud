@@ -1,20 +1,19 @@
 package com.berg.system.service.system.impl;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.berg.auth.system.auth.AuthenticationUtil;
+import com.berg.common.constant.RedisKeyConstants;
+import com.berg.common.exception.UserFriendException;
 import com.berg.dao.base.DSTransactional;
+import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.sys.entity.UserComponentTbl;
-import com.berg.dao.system.sys.service.UserComponentTblDao;
 import com.berg.dao.system.sys.entity.UserRoleTbl;
 import com.berg.dao.system.sys.entity.UserTbl;
+import com.berg.dao.system.sys.service.UserComponentTblDao;
 import com.berg.dao.system.sys.service.UserRoleTblDao;
 import com.berg.dao.system.sys.service.UserTblDao;
-import com.berg.dao.page.PageInfo;
-import com.berg.constant.RedisKeyConstants;
-import com.berg.exception.UserFriendException;
 import com.berg.system.service.system.UserService;
-import com.berg.system.auth.JWTUtil;
 import com.berg.vo.system.UserEditVo;
 import com.berg.vo.system.UserVo;
 import com.berg.vo.system.in.GetUserPageInVo;
@@ -23,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
@@ -34,7 +32,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
     @Autowired
     UserTblDao userTblDao;
     @Autowired
@@ -97,7 +95,7 @@ public class UserServiceImpl implements UserService {
     @DSTransactional
     @Override
     public Integer addUser(UserEditVo input) {
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer userId = addOrUpdateUser(input, operator);
         if (input.getRoldIds().size() > 0) {
             addOrUpdateUserRole(userId, input.getRoldIds(), operator);
@@ -117,7 +115,7 @@ public class UserServiceImpl implements UserService {
     @DSTransactional
     @Override
     public Integer updateUser(UserEditVo input) {
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer userId = addOrUpdateUser(input, operator);
         if (input.getRoldIds().size() > 0) {
             addOrUpdateUserRole(userId, input.getRoldIds(), operator);
@@ -143,7 +141,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserFriendException("该用户已被删除");
             }
             LocalDateTime now = LocalDateTime.now();
-            String operator = jWTUtil.getUsername();
+            String operator = authenticationUtil.getUsername();
             userTbl.setIsdel(1);
             userTbl.setDelTime(now);
             userTbl.setDelUser(operator);
@@ -191,7 +189,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserFriendException("该用户已被锁定");
             }
             LocalDateTime now = LocalDateTime.now();
-            String operator = jWTUtil.getUsername();
+            String operator = authenticationUtil.getUsername();
             userTbl.setIslock(1);
             userTbl.setLockTime(now);
             userTbl.setLockUser(operator);
@@ -212,7 +210,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserFriendException("该用户已被删除");
             }
             LocalDateTime now = LocalDateTime.now();
-            String operator = jWTUtil.getUsername();
+            String operator = authenticationUtil.getUsername();
             userTbl.setIslock(0);
             userTbl.setLockTime(now);
             userTbl.setLockUser(operator);
@@ -236,7 +234,7 @@ public class UserServiceImpl implements UserService {
                 throw new UserFriendException("该用户已被删除");
             }
             LocalDateTime now = LocalDateTime.now();
-            String operator = jWTUtil.getUsername();
+            String operator = authenticationUtil.getUsername();
             userTbl.setPassword(DigestUtils.md5DigestAsHex(input.getPassword().getBytes()));
             userTbl.setModifyTime(now);
             userTbl.setModifyUser(operator);

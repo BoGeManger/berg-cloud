@@ -1,21 +1,24 @@
 package com.berg.system.service.system.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.DES;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.berg.constant.RedisKeyConstants;
+import com.berg.auth.system.auth.AuthenticationToken;
+import com.berg.auth.system.auth.AuthenticationUtil;
+import com.berg.auth.system.constant.SystemConstants;
+import com.berg.common.constant.RedisKeyConstants;
+import com.berg.common.exception.UserFriendException;
 import com.berg.dao.system.sys.entity.ComponentTbl;
-import com.berg.dao.system.sys.entity.UserTbl;
 import com.berg.dao.system.sys.service.ComponentTblDao;
 import com.berg.dao.system.sys.service.RoleTblDao;
 import com.berg.dao.system.sys.service.UserTblDao;
-import com.berg.exception.UserFriendException;
 import com.berg.system.service.system.LoginService;
-import com.berg.system.auth.JWTToken;
-import com.berg.system.auth.JWTUtil;
-import com.berg.system.constant.SystemConstants;
-import com.berg.utils.DateUtil;
-import com.berg.utils.DesUtil;
+import com.berg.dao.system.sys.entity.UserTbl;
 import com.berg.vo.system.UserVo;
 import com.berg.vo.system.in.LoginInVo;
 import com.berg.vo.system.out.LoginOutVo;
@@ -34,7 +37,7 @@ import java.util.stream.Collectors;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
     @Autowired
     SystemConstants systemConstans;
     @Autowired
@@ -59,13 +62,13 @@ public class LoginServiceImpl implements LoginService {
         //用户登录验证
         UserTbl userTbl = loginValid(input);
         //生成JWT
-        JWTToken jwtToken = getJwt(userTbl);
+        AuthenticationToken authenticationToken = getJwt(userTbl);
         //生成token缓存信息
-        String key = String.format(RedisKeyConstants.System.SYSTEM_TOKEN, jwtToken.getToken());
-        stringTemplate.opsForValue().set(key, jwtToken.getToken(), systemConstans.getExpireTime(), TimeUnit.SECONDS);
+        String key = String.format(RedisKeyConstants.System.SYSTEM_TOKEN, authenticationToken.getToken());
+        stringTemplate.opsForValue().set(key, authenticationToken.getToken(), systemConstans.getExpireTime(), TimeUnit.SECONDS);
         //生成返回信息
-        result.setToken(jwtToken.getToken());
-        result.setExipreTime(jwtToken.getExipreAt());
+        result.setToken(authenticationToken.getToken());
+        result.setExipreTime(authenticationToken.getExipreAt());
         result.setRoles(getUserRoles(userTbl.getUsername()));
         result.setPermissions(getUserPerms(userTbl.getUsername()));
         UserVo userVo = new UserVo();
@@ -97,11 +100,11 @@ public class LoginServiceImpl implements LoginService {
      * @param userTbl
      * @return
      */
-    JWTToken getJwt(UserTbl userTbl) {
-        String token = DesUtil.encrypt(jWTUtil.sign(userTbl.getUsername(), userTbl.getPassword()));
-        Date expireTime = DateUtil.addDateBySecond(new Date(), systemConstans.getExpireTime());
+    AuthenticationToken getJwt(UserTbl userTbl) {
+        String token = authenticationUtil.DES.encryptHex(authenticationUtil.sign(userTbl.getUsername(), userTbl.getPassword(),systemConstans.getExpireTime())).toUpperCase();
+        Date expireTime = DateUtil.offsetSecond(new Date(),systemConstans.getExpireTime());
         String expireTimeStr = DateUtil.format(expireTime, "yyyyMMddHHmmss");
-        return new JWTToken(token, expireTimeStr);
+        return new AuthenticationToken(token, expireTimeStr);
     }
 
     /**
@@ -155,7 +158,7 @@ public class LoginServiceImpl implements LoginService {
      */
     Boolean checkAccount(String userName){
         Boolean flag = false;
-        String[] accounts = StringUtils.splitByWholeSeparatorPreserveAllTokens(systemConstans.getShiroAccounts(), ",");
+        String[] accounts = StringUtils.splitByWholeSeparatorPreserveAllTokens(systemConstans.getAccounts(), ",");
         for (String a : accounts) {
             if (a.equals(userName))
                 flag = true;
@@ -168,7 +171,7 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public void logout(){
-        String token =  jWTUtil.getToken();
+        String token =  authenticationUtil.getToken();
         if(StringUtils.isNotBlank(token)){
             String key = String.format(RedisKeyConstants.System.SYSTEM_TOKEN, token);
             stringTemplate.delete(key);

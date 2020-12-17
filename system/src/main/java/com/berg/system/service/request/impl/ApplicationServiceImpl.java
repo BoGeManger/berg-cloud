@@ -1,21 +1,20 @@
 package com.berg.system.service.request.impl;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.berg.constant.RedisKeyConstants;
+import com.berg.auth.system.auth.AuthenticationUtil;
+import com.berg.common.constant.RedisKeyConstants;
+import com.berg.common.exception.UserFriendException;
+import com.berg.common.utils.SnowflakeIdWorker;
 import com.berg.dao.base.DSTransactional;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.res.entity.ApplicationApiTbl;
 import com.berg.dao.system.res.entity.ApplicationTbl;
 import com.berg.dao.system.res.service.ApplicationApiTblDao;
 import com.berg.dao.system.res.service.ApplicationTblDao;
-import com.berg.exception.UserFriendException;
-import com.berg.system.auth.JWTUtil;
 import com.berg.system.service.request.ApplicationService;
-import com.berg.utils.SnowflakeIdWorker;
 import com.berg.vo.request.ApplicationEditVo;
 import com.berg.vo.request.ApplicationVo;
 import com.berg.vo.request.in.GetApplicationPageInVo;
@@ -24,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
@@ -94,7 +92,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public Integer addApplication(ApplicationEditVo input){
         checkName(input);
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer appId = addOrUpdateApplication(input,operator);
         if(input.getApiIds().size()>0){
             addOrUpdateApplicationApi(appId,input.getApiIds(),operator);
@@ -111,7 +109,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public Integer updateApplication(ApplicationEditVo input){
         checkName(input);
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer appId = addOrUpdateApplication(input,operator);
         if(input.getApiIds().size()>0){
             addOrUpdateApplicationApi(appId,input.getApiIds(),operator);
@@ -204,7 +202,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public void delApplication(Integer id){
         LocalDateTime now = LocalDateTime.now();
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         ApplicationTbl applicationTbl = applicationTblDao.getById(id);
         if(applicationTbl!=null){
             applicationTbl.setDelTime(now);

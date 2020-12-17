@@ -1,5 +1,5 @@
 server:
-  port: 42000
+  port: 41000
   servlet:
     context-path: /system
   tomcat:
@@ -131,10 +131,11 @@ minio:
   password: 12345678
   bucketName: master
 
-shiro:
-  urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login,/**/druid/**,/**/actuator/**
-  accounts: admin
-  expireTime: 7200
+auth:
+  system:
+    urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login,/**/druid/**,/**/actuator/**
+    accounts: admin
+    expireTime: 7200
 
 xxl:
   job:

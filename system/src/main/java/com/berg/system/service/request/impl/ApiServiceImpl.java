@@ -2,11 +2,11 @@ package com.berg.system.service.request.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.berg.auth.system.auth.AuthenticationUtil;
+import com.berg.common.exception.UserFriendException;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.res.entity.ApiTbl;
 import com.berg.dao.system.res.service.ApiTblDao;
-import com.berg.exception.UserFriendException;
-import com.berg.system.auth.JWTUtil;
 import com.berg.system.service.request.ApiService;
 import com.berg.vo.request.ApiEditVo;
 import com.berg.vo.request.ApiVo;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class ApiServiceImpl implements ApiService {
 
     @Autowired
-    JWTUtil jWTUtil;
+    AuthenticationUtil authenticationUtil;
     @Autowired
     ApiTblDao apiTblDao;
 
@@ -68,7 +68,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public Integer addApi(ApiEditVo input){
         checkServiceAndPath(input);
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer apiId = addOrUpdateApi(input,operator);
         return  apiId;
     }
@@ -81,7 +81,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public Integer updateApi(ApiEditVo input){
         checkServiceAndPath(input);
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         Integer apiId = addOrUpdateApi(input,operator);
         return  apiId;
     }
@@ -136,7 +136,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public void delApi(Integer id){
         LocalDateTime now = LocalDateTime.now();
-        String operator = jWTUtil.getUsername();
+        String operator = authenticationUtil.getUsername();
         ApiTbl apiTbl = apiTblDao.getById(id);
         if(apiTbl!=null){
             apiTbl.setDelTime(now);

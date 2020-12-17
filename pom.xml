@@ -26,7 +26,6 @@
 
         <module>admin</module>
         <module>gateway</module>
-        <module>api</module>
         <module>manager</module>
 
         <module>system</module>
@@ -63,11 +62,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.68</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
         <dependency>
