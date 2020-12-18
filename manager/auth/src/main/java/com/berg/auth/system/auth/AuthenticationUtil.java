@@ -78,8 +78,7 @@ public class AuthenticationUtil {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            String header = request.getHeader(AuthenticationFilter.TOKEN);
-            return  DES.encryptHex(header);
+            return  DES.decryptStr(request.getHeader(AuthenticationFilter.TOKEN).toLowerCase());
         } catch (JWTDecodeException e) {
             return null;
         }

@@ -142,8 +142,8 @@ public class AuthorizingRealm {
      * @throws AuthenticationException
      */
     public void doGetAuthenticationInfo(String token) throws AuthenticationException{
-        String encryptToken = authenticationUtil.DES.decryptStr(token.toLowerCase());
-        String username = authenticationUtil.getUsername(encryptToken);
+        String decryptToken = authenticationUtil.DES.decryptStr(token.toLowerCase());
+        String username = authenticationUtil.getUsername(decryptToken);
         String key = String.format(RedisKeyConstants.System.SYSTEM_TOKEN, token);
         if (!stringTemplate.hasKey(key)) {
             throw new AuthenticationException("token已经过期");
@@ -156,7 +156,7 @@ public class AuthorizingRealm {
         UserTbl userTbl = userTblDao.getOne(new LambdaQueryWrapper<UserTbl>().eq(UserTbl::getUsername, username));
         if (userTbl == null)
             throw new AuthenticationException("用户名或密码错误");
-        if (!authenticationUtil.verify(encryptToken, username, userTbl.getPassword()))
+        if (!authenticationUtil.verify(decryptToken, username, userTbl.getPassword()))
             throw new AuthenticationException("token校验不通过");
     }
 
