@@ -1,7 +1,5 @@
 package com.berg.gateway.filter;
 
-import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.berg.auth.system.auth.AuthenticationFilter;
 import com.berg.auth.system.constant.SystemConstants;
 import com.berg.common.constant.MessageConstants;

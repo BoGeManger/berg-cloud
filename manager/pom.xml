@@ -11,8 +11,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>api</module>
-        <module>auth</module>
-        <module>domain</module>
+        <module>system-auth</module>
+        <module>log</module>
+        <module>request</module>
     </modules>
     <artifactId>manager</artifactId>
     <version>1.0.0-SNAPSHOT</version>
