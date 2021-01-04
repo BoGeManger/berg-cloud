@@ -13,6 +13,7 @@
         <module>system-dao</module>
         <module>log-dao</module>
         <module>base-dao</module>
+        <module>all-dao</module>
     </modules>
     <artifactId>dao</artifactId>
 

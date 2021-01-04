@@ -1,6 +1,6 @@
 package com.berg.system.controller;
 
-import com.berg.common.base.BaseController;
+import com.berg.common.controller.AbstractController;
 import com.berg.common.constant.Result;
 import com.berg.dao.page.PageInfo;
 import com.berg.system.service.request.ApplicationService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/app")
 @Api(tags = "请求应用管理")
-public class ApplicationController extends BaseController {
+public class ApplicationController extends AbstractController {
 
     @Autowired
     ApplicationService applicationService;

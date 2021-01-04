@@ -1,11 +1,9 @@
 package com.berg.auth.system.auth;
 
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.symmetric.DES;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.berg.auth.system.constant.SystemConstants;
+import com.berg.auth.system.constant.AuthConstants;
 import com.berg.common.constant.RedisKeyConstants;
 import com.berg.dao.system.sys.entity.ComponentTbl;
 import com.berg.dao.system.sys.entity.UserTbl;
@@ -31,7 +29,7 @@ public class AuthenticationRealm {
     AuthenticationUtil authenticationUtil;
 
     @Autowired
-    SystemConstants systemConstants;
+    AuthConstants systemConstants;
     @Autowired
     StringRedisTemplate stringTemplate;
 

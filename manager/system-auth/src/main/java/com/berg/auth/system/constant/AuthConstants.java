@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class SystemConstants {
+public class AuthConstants {
 
     @Value("${auth.system.urls:default}")
     String urls;

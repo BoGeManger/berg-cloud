@@ -1,65 +1,46 @@
 package com.berg.dao.system.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * <p>
- * 系统文件表
+ * 系统用户组织表
  * </p>
  *
- * @author
+ * @author 
  * @since 2020-12-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sys_file_tbl")
-public class FileTbl implements Serializable {
+@TableName("sys_user_organization_tbl")
+public class UserOrganizationTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 系统文件表id
+     * 系统用户组织表id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 名称
+     * 用户id
      */
-    private String name;
+    private Integer userId;
 
     /**
-     * 业务编码
+     * 组织id
      */
-    private String code;
-
-    /**
-     * 文件路径
-     */
-    private String path;
-
-    /**
-     * 文件全路径
-     */
-    private String fullPath;
-
-    /**
-     * 类型
-     */
-    private Integer type;
-
-    /**
-     * 状态(0 正在上传 1 已上传)
-     */
-    private Integer status;
+    private Integer organizationId;
 
     /**
      * 创建时间
@@ -70,16 +51,6 @@ public class FileTbl implements Serializable {
      * 创建用户
      */
     private String createUser;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime modifyTime;
-
-    /**
-     * 修改用户
-     */
-    private String modifyUser;
 
     /**
      * 删除时间

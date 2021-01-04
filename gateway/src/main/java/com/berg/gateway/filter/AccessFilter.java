@@ -1,7 +1,7 @@
 package com.berg.gateway.filter;
 
 import com.berg.auth.system.auth.AuthenticationFilter;
-import com.berg.auth.system.constant.SystemConstants;
+import com.berg.auth.system.constant.AuthConstants;
 import com.berg.common.constant.MessageConstants;
 import com.berg.common.constant.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +26,7 @@ import javax.naming.AuthenticationException;
 public class AccessFilter implements GlobalFilter {
 
     @Autowired
-    SystemConstants systemConstants;
+    AuthConstants systemConstants;
     @Autowired
     AuthenticationFilter authenticationFilter;
 

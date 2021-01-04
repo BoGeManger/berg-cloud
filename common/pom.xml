@@ -9,6 +9,7 @@
         <module>kafka</module>
         <module>minio</module>
         <module>xxl-job</module>
+        <module>all-common</module>
     </modules>
 
     <parent>

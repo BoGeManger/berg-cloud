@@ -9,6 +9,7 @@ import com.berg.dao.system.sys.entity.RoleComponentTbl;
 import com.berg.dao.system.sys.entity.RoleTbl;
 import com.berg.dao.system.sys.service.RoleComponentTblDao;
 import com.berg.dao.system.sys.service.RoleTblDao;
+import com.berg.system.service.AbstractService;
 import com.berg.system.service.system.RoleService;
 import com.berg.vo.system.RoleEditVo;
 import com.berg.vo.system.RoleVo;
@@ -23,10 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends AbstractService implements RoleService {
 
-    @Autowired
-    AuthenticationUtil authenticationUtil;
     @Autowired
     RoleTblDao roleTblDao;
     @Autowired
