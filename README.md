@@ -1,15 +1,38 @@
 #Spring Cloud示例项目
+* 包含中间件，基础后台系统业务逻辑，授权管理，文件管理
+* 网管鉴权，feign服务调用，admin监控
 
-### 架构分层简介
+### 目录结构
+├── admin 监控服务<br>
+├── common 公共应用<br>
+│   ├─ all-common 公共应用所有引用<br>
+│   ├─ application 基础服务应用<br>
+│   ├─ kafka 消息队列<br>
+│   ├─ minio 文件<br>
+│   ├─ redis 缓存<br>
+│   ├─ util 工具<br>
+│   └─ xxl-job 分布式任务调度<br>
+├── dao 数据交互<br>
+│   ├─ all-dao 数据交互所有引用<br>
+│   ├─ base-dao 基础数据交互引用<br>
+│   ├─ log-dao 日志数据交互引用<br>
+│   └─ system-dao 后台系统数据交互<br>
+├── gateway 网管服务<br>
+├── manager 公共管理层<br>
+│   ├─ api feign调用<br>
+│   ├─ log 日志应用<br>
+│   ├─ request 请求应用<br>
+│   └─ system-auth 后台服务授权<br>
+├── model 实体层<br>
+├── sql 数据脚本<br>
+└── system 后台服务<br>
+
+### 服务划分
 |名称|定义|端口|workerId|
 |:----: |:----:|:----:|:----:|
-|common|公共|||
-|model|实体|||
-|dao|后台服务数据交互|||
-|manager|公共服务应用|||
 |admin|监控服务|30000||
 |gateway|网关|40000|0|
-|system|后台服务|41000|1|
+|system|后台服务|42000|1|
 
 * 使用分布式id生成需配置workerId和datacenterId，需保证每个服务workerId和datacenterId组合均不一致，docker容器初始化时workerId为默认设置，datacenterId则根据端口号生成，如40001的datacenterId即为1，以此规则命名
 
@@ -54,13 +77,14 @@
  * 定时任务：xxl-job
  * 分布式事务：Seata
  * 文件服务：Minio
- * Excel文件处理：AutoPOI
- * 鉴权框架：Shiro+JWT
- * Mybatis插件：Mybatis Plus,PageHelper,dynamic datasource
- * 接口文档框架：Swagger 2
+ * 鉴权：Shiro+JWT
+ * Mybatis插件：Mybatis Plus
+ * 分页插件：PageHelper
+ * 多数据源组件：dynamic datasource
+ * 接口文档组件：knife4j
  * JDBC组件：Druid 
- * 公共工具：Hutool 
- * 验证框架：Hibernate Validator
+ * 公共工具组件：Hutool 
+ * 验证组件：Hibernate Validator
  
  ### api使用
  ```
