@@ -20,15 +20,13 @@
     </parent>
 
     <modules>
-        <module>common</module>
-        <module>model</module>
-        <module>dao</module>
-
         <module>admin</module>
-        <module>gateway</module>
+        <module>common</module>
+        <module>dao</module>
+        <module>generator</module>
         <module>manager</module>
-
-        <module>system</module>
+        <module>model</module>
+        <module>modules</module>
     </modules>
 
     <properties>
