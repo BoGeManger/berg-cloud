@@ -7,7 +7,7 @@ import javax.validation.constraints.Min;
 
 @Data
 public class PageInVo {
-    
+
     @Min(value = 1,message = "当前页码不能小于1")
     @ApiModelProperty(value = "当前页码")
     int pageIndex;

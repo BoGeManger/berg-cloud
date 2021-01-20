@@ -5,7 +5,7 @@ import com.berg.generator.AutoGenerator;
 import com.berg.generator.config.*;
 import com.berg.generator.config.rules.NamingStrategy;
 import com.berg.generator.engine.FreemarkerTemplateEngine;
-import com.berg.generator.system.config.GeneratorConfig;
+import com.berg.generator.log.config.GeneratorConfig;
 
 /**
  * 通用CRUD生成
@@ -41,6 +41,7 @@ public class MybatisplusGenerator extends AbstractGenerator {
         }
         // 包配置
         PackageConfig pc = new PackageConfig();
+        pc.setParentModuleName(GeneratorConfig.PARENT_MODULE_NAME);
         pc.setParent("com.berg.dao." + GeneratorConfig.PARENT_MODULE_NAME);
         if (GeneratorConfig.GENERATE_MODULE) {
             pc.setModuleName(scanner("模块名"));
