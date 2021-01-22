@@ -1,9 +1,10 @@
 package com.berg.generator.log;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.berg.generator.AbstractGenerator;
 import com.berg.generator.AutoGenerator;
 import com.berg.generator.config.*;
-import com.berg.generator.config.rules.NamingStrategy;
 import com.berg.generator.engine.FreemarkerTemplateEngine;
 import com.berg.generator.log.config.GeneratorConfig;
 
@@ -21,61 +22,61 @@ public class MybatisplusGenerator extends AbstractGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + GeneratorConfig.PATH);//路径
+        gc.setOutputDir(projectPath + com.berg.generator.system.config.GeneratorConfig.PATH);//路径
         gc.setOpen(false);
         gc.setAuthor("");
         //gc.setSwagger2(true);
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
-        gc.setFileOverride(GeneratorConfig.FILE_OVERRIDE);//是否覆盖
-        gc.setDs(GeneratorConfig.DS);
-        gc.setParentModuleName(GeneratorConfig.PARENT_MODULE_NAME);
+        gc.setFileOverride(com.berg.generator.system.config.GeneratorConfig.FILE_OVERRIDE);//是否覆盖
+        gc.setDs(com.berg.generator.system.config.GeneratorConfig.DS);
+        gc.setParentModuleName(com.berg.generator.system.config.GeneratorConfig.PARENT_MODULE_NAME);
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl(GeneratorConfig.URL);
-        dsc.setDriverName(GeneratorConfig.DRIVER_NAME);
-        dsc.setUsername(GeneratorConfig.USER_NAME);
-        dsc.setPassword(GeneratorConfig.PASSWORD);
-        if (GeneratorConfig.DRIVER.equals("postgresql")) {//postgresql使用
-            dsc.setSchemaName(GeneratorConfig.SCHEMA_NAME);
+        dsc.setUrl(com.berg.generator.system.config.GeneratorConfig.URL);
+        dsc.setDriverName(com.berg.generator.system.config.GeneratorConfig.DRIVER_NAME);
+        dsc.setUsername(com.berg.generator.system.config.GeneratorConfig.USER_NAME);
+        dsc.setPassword(com.berg.generator.system.config.GeneratorConfig.PASSWORD);
+        if (com.berg.generator.system.config.GeneratorConfig.DBTYPE == DbType.POSTGRE_SQL) {//postgresql使用
+            dsc.setSchemaName(com.berg.generator.system.config.GeneratorConfig.SCHEMA_NAME);
         }
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParentModuleName(GeneratorConfig.PARENT_MODULE_NAME);
-        pc.setParent("com.berg.dao." + GeneratorConfig.PARENT_MODULE_NAME);
-        if (GeneratorConfig.GENERATE_MODULE) {
+        pc.setParentModuleName(com.berg.generator.system.config.GeneratorConfig.PARENT_MODULE_NAME);
+        pc.setParent(com.berg.generator.system.config.GeneratorConfig.BASE_MODULE_NAME + StringPool.DOT + com.berg.generator.system.config.GeneratorConfig.PARENT_MODULE_NAME);
+        if (com.berg.generator.system.config.GeneratorConfig.GENERATE_MODULE) {
             pc.setModuleName(scanner("模块名"));
         }
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        strategy.setNaming(com.berg.generator.system.config.GeneratorConfig.NAMING);
+        strategy.setColumnNaming(com.berg.generator.system.config.GeneratorConfig.COLUMN_NAMING);
         strategy.setEntityLombokModel(true);
         strategy.setChainModel(true);
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setInclude(scanner("表名，多个英文逗号分割").split(StringPool.COMMA));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
-        if (!GeneratorConfig.FILTER_MODULE_NAME) {//不启用名称模块过滤
+        strategy.setTablePrefix(pc.getModuleName() + StringPool.UNDERSCORE);
+        if (!com.berg.generator.system.config.GeneratorConfig.FILTER_MODULE_NAME) {//不启用名称模块过滤
             strategy.setTablePrefix("");
         }
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
-        if (!GeneratorConfig.GENERATE_ENTITY) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_ENTITY) {
             templateConfig.setEntity(null);
         }
-        if (!GeneratorConfig.GENERATE_MAPPER) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_MAPPER) {
             templateConfig.setMapper(null);
         }
-        if (!GeneratorConfig.GENERATE_DAO) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_DAO) {
             templateConfig.setDao(null);
         }
-        if (!GeneratorConfig.GENERATE_DAO_IMPL) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_DAO_IMPL) {
             templateConfig.setDaoImpl(null);
         }
-        if (!GeneratorConfig.GENERATE_XML) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_XML) {
             templateConfig.setXml(null);
         }
-        if (!GeneratorConfig.GENERATE_BUSINESS) {
+        if (!com.berg.generator.system.config.GeneratorConfig.GENERATE_BUSINESS) {
             templateConfig.setVo(null);
             templateConfig.setEditVo(null);
             templateConfig.setPageInVo(null);
