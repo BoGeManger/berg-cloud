@@ -11,16 +11,16 @@ public class ComponentFallback implements ComponentService {
 
     @Override
     public Result getComTree() {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result getCom(Integer id) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result operatorBatchCom(OperatorBatchComInVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 }

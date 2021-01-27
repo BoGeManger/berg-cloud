@@ -15,26 +15,26 @@ public class ApiFallback implements ApiService {
 
     @Override
     public Result<PageInfo<ApiVo>> getApiPage(GetApiPageInVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<ApiEditVo> getApi(Integer id) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Integer> addApi(ApiEditVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Integer> updateApi(ApiEditVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Boolean> delApi(EntityIdVo<Integer> input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 }

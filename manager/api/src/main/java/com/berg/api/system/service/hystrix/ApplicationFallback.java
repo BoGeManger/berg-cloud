@@ -15,31 +15,31 @@ public class ApplicationFallback implements ApplicationService {
 
     @Override
     public Result<PageInfo<ApplicationVo>> getApplicationPage(GetApplicationPageInVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<ApplicationEditVo> getApplication(Integer id) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Integer> addApplication(ApplicationEditVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Integer> updateApplication(ApplicationEditVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Boolean> updateApplicationSecret(EntityIdVo<Integer> input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 
     @Override
     public Result<Boolean> delApplication(EntityIdVo<Integer> input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 }

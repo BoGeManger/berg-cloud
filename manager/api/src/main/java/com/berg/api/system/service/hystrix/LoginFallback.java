@@ -11,6 +11,6 @@ public class LoginFallback implements LoginService {
 
     @Override
     public Result login(LoginInVo input) {
-        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网络延迟，请稍后重试",null);
+        return new Result(MessageConstants.USER_FRIENDLY_ERROR_CODE,"网关异常","网络延迟，请稍后重试");
     }
 }

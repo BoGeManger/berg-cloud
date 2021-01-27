@@ -17,6 +17,12 @@ spring:
       discovery:
         server-addr: 172.16.10.19:8848
     gateway:
+      # 默认Hystrix 配置参数
+      default-filters:
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/defaultFallback
       routes:
         - id: system
           uri: lb://system
