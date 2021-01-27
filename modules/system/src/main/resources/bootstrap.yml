@@ -131,12 +131,6 @@ minio:
   password: 12345678
   bucketName: master
 
-auth:
-  system:
-    urls: /**/doc.html/**,/**/swagger-resources/**,/**/v2/**,/**/webjars/**,/system/login/login,/**/druid/**,/**/actuator/**
-    accounts: admin
-    expireTime: 7200
-
 xxl:
   job:
     admin:

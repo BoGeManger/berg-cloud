@@ -2,14 +2,13 @@ package com.berg.system.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.berg.auth.system.auth.AuthenticationUtil;
 import com.berg.dao.base.DSTransactional;
 import com.berg.dao.page.PageInfo;
 import com.berg.dao.system.sys.entity.RoleComponentTbl;
 import com.berg.dao.system.sys.entity.RoleTbl;
 import com.berg.dao.system.sys.service.RoleComponentTblDao;
 import com.berg.dao.system.sys.service.RoleTblDao;
-import com.berg.system.service.AbstractService;
+import com.berg.auth.system.service.AbstractService;
 import com.berg.system.service.system.RoleService;
 import com.berg.vo.system.RoleEditVo;
 import com.berg.vo.system.RoleVo;
