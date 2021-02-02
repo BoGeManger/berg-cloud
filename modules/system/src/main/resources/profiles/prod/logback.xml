@@ -58,25 +58,13 @@
             </pattern>
         </encoder>
     </appender>
-
-    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
-        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
-            <dataSource class="com.alibaba.druid.pool.DruidDataSource">
-                <driverClassName>com.mysql.cj.jdbc.Driver</driverClassName>
-                <url>jdbc:mysql://127.0.0.1:3306/logdb?serverTimezone=UTC</url>
-                <username>root</username>
-                <password>123456</password>
-            </dataSource>
-        </connectionSource>
-    </appender>
-
+	
 	<logger name="org.springframework" level="WARN" />
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="FILE-ERROR" />
-        <appender-ref ref="DB" />
 	</root>
 
 </configuration>
