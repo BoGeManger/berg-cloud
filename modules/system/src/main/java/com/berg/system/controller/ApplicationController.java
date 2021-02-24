@@ -26,38 +26,36 @@ public class ApplicationController extends AbstractController {
     @ApiOperation("获取请求应用分页列表")
     @GetMapping(value = "getApplicationPage")
     public Result<PageInfo<ApplicationVo>> getApplicationPage(@Validated GetApplicationPageInVo input){
-        return getSuccessResult("请求成功",applicationService.getApplicationPage(input));
+        return success("请求成功",()->applicationService.getApplicationPage(input));
     }
 
     @ApiOperation("获取请求应用")
     @GetMapping(value = "getApplication")
     public Result<ApplicationEditVo> getApplication(@ApiParam(value = "表id",required = true) @RequestParam Integer id){
-        return getSuccessResult("请求成功",applicationService.getApplication(id));
+        return success("请求成功",()->applicationService.getApplication(id));
     }
 
     @ApiOperation("新增请求应用")
     @PostMapping(value = "addApplication")
     public Result<Integer> addApplication(@RequestBody @Validated ApplicationEditVo input){
-        return getSuccessResult("请求成功",applicationService.addApplication(input));
+        return success("请求成功",()->applicationService.addApplication(input));
     }
 
     @ApiOperation("修改请求应用")
     @PutMapping(value = "updateApplication")
     public Result<Integer> updateApplication(@RequestBody @Validated ApplicationEditVo input){
-        return getSuccessResult("请求成功",applicationService.updateApplication(input));
+        return success("请求成功",()->applicationService.updateApplication(input));
     }
 
     @ApiOperation("修改请求应用密钥")
     @PutMapping(value = "updateApplicationSecret")
-    public Result<Boolean> updateApplicationSecret(@RequestBody EntityIdVo<Integer> input){
-        applicationService.updateApplicationSecret(input.getId());
-        return getSuccessResult("请求成功",true);
+    public Result<Void> updateApplicationSecret(@RequestBody EntityIdVo<Integer> input){
+        return success("请求成功",()->applicationService.updateApplicationSecret(input.getId()));
     }
 
     @ApiOperation("删除请求应用")
     @DeleteMapping(value = "delApplication")
-    public Result<Boolean> delApplication(@RequestBody EntityIdVo<Integer> input){
-        applicationService.delApplication(input.getId());
-        return getSuccessResult("请求成功",true);
+    public Result<Void> delApplication(@RequestBody EntityIdVo<Integer> input){
+        return success("请求成功",()->applicationService.delApplication(input.getId()));
     }
 }
